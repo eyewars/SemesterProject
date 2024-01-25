@@ -1,14 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prosjekt</title>
-</head>
-<body>
-    <h1>Heisann!</h1>
-    <button>Login</button>
-    <br>
-    <button>Register</button>
-</body>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Prosjekt</title>
+	</head>
+
+	<body>
+		<h1>Heisann!</h1>
+		<button>Login</button>
+		<br>
+		<button>Register</button>
+
+		<br>
+		<br>
+
+		<form id="registerForm">
+			<label>Username:
+				<input type="text" name="username">
+			</label>
+			<br>
+			<label>Email:
+				<input type="text" name="email">
+			</label>
+			<br>
+			<label>Password:
+				<input type="text" name="password">
+			</label>
+			<br>
+			<button type="submit">Create User</button>
+		</form>
+
+		<br>
+
+		<form id="updateForm">
+			<label>ID:
+				<input type="text" name="id">
+			</label>
+			<br>
+			<label>Username:
+				<input type="text" name="username">
+			</label>
+			<br>
+			<label>Email:
+				<input type="text" name="email">
+			</label>
+			<br>
+			<label>Password:
+				<input type="text" name="password">
+			</label>
+			<br>
+			<button type="submit">Update User</button>
+		</form>
+
+		<br>
+
+		<form id="getForm">
+			<label>ID:
+				<input type="text" name="id">
+			</label>
+			<br>
+			<button type="submit">Get User</button>
+		</form>
+
+		<br>
+
+		<button id="getAllUsers">Get all users</button>
+
+		<br>
+		<br>
+
+		<form id="deleteForm">
+			<label>ID:
+				<input type="text" name="id">
+			</label>
+			<br>
+			<button type="submit">Delete User</button>
+		</form>
+	</body>
+	<script src="loginForms.mjs"></script>
 </html>

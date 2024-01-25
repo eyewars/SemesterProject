@@ -11,14 +11,14 @@ server.set("port", port);
 server.use(express.static("public"));
 
 server.use(express.json());
-server.use(express.urlencoded({extended: true}));
+server.use(express.urlencoded({ extended: true }));
 
 // Telling the server to use the USER_API (all urls that uses this code will have to have the /user after the base address) 
 server.use("/user", USER_API);
 
 // A get request handler example)
 server.get("/", (req, res, next) => {
-    res.status(200).send(JSON.stringify({ msg: "These are not the droids...." })).end();
+	res.status(200).send(JSON.stringify({ msg: "These are not the droids...." })).end();
 });
 
 
@@ -27,5 +27,5 @@ server.get("/", (req, res, next) => {
 
 // Start the server 
 server.listen(server.get("port"), function () {
-    console.log("server running", server.get("port"));
+	console.log("server running", server.get("port"));
 });
