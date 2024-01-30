@@ -1,3 +1,4 @@
+"use strict";
 const registerForm = document.getElementById("registerForm");
 const updateForm = document.getElementById("updateForm");
 const getForm = document.getElementById("getForm");

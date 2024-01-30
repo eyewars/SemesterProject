@@ -1,6 +1,7 @@
+"use strict";
 import express from "express"; //fjerna ", { response }" tror det bare er bs
 import User from "../modules/user.mjs";
-import HttpCodes from "../modules/httpErrorCodes.mjs";
+import HttpCodes from "../modules/httpCodes.mjs";
 
 const USER_API = express.Router();
 
