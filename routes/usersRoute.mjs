@@ -1,5 +1,5 @@
 "use strict";
-import express from "express"; //fjerna ", { response }" tror det bare er bs
+import express from "express";
 import User from "../modules/user.mjs";
 import HttpCodes from "../modules/httpCodes.mjs";
 

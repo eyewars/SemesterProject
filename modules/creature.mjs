@@ -1,5 +1,5 @@
 "use strict";
-import { canvas, ctx } from "./draw.mjs";
+import { canvasWidth, canvasHeight } from "./gameLogic.mjs";
 
 class Creature{
     constructor(type){
@@ -10,14 +10,14 @@ class Creature{
 
         if (type == "friend"){
             this.xPos = 0;
-            this.color = "green";
         }
         else{
-            this.xPos = canvas.width - this.width;
-            this.color = "purple";
+            this.xPos = canvasWidth - this.width;
         }
 
-        this.speed = Math.random() * 100;
+        this.yPos = canvasHeight - this.height;
+
+        this.speed = 100;
     }
 
     move(diff){
@@ -27,11 +27,6 @@ class Creature{
         else {
             this.xPos -= this.speed * diff; 
         }
-    }
-
-    draw(){
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.xPos, canvas.height - this.height, this.width, this.height);
     }
 }
 
