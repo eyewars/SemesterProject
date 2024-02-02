@@ -5,6 +5,8 @@ class Castle{
     constructor(type){
         this.type = type;
 
+        this.health = 10;
+
         this.width = 120;
         this.height = 160;
 
@@ -16,6 +18,10 @@ class Castle{
         }
 
         this.yPos = canvasHeight - this.height;
+    }
+
+    takeDamage(amount){
+        this.health -= amount;
     }
 }
 
