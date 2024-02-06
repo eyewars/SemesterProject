@@ -12,9 +12,31 @@ socket.on("connect", () => {
     console.log("Client connected: " + socket.id);
 });
 
-socket.emit("onLoad");
+const startGameButton = document.getElementById("startGameButton");
 
-socket.on("onLoad", (data) => {
+startGameButton.addEventListener("click", async () => {
+    const requestOptions = {
+		method: "POST"
+	}
+
+    try {
+		let response = await fetch("/game", requestOptions);
+
+		if (response.status != 200) {
+			console.log("FEIL I START GAME");
+			throw new Error("Error: " + response.status);
+		}
+
+		let data = await response.json();
+		console.log(data);
+
+        socket.emit("loadGame");
+	} catch (error) {
+		console.log(error);
+	}
+})
+
+socket.on("loadGame", (data) => {
     game = data;
     requestAnimationFrame(drawGame);
 })

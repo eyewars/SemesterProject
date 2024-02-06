@@ -4,12 +4,16 @@ import Castle from "./castle.mjs";
 import { canvasWidth } from "./gameLogic.mjs";
 
 class Game{
-    constructor(){
+    constructor(player1, player2){
+        this.player1 = player1;
+        this.player2 = player2;
+
         this.friends = [];
         this.enemies = [];
 
         this.cells = [];
 
+        // Endre til bare hvilken unit som er der / undefined. Occupied er ikke nødvendig. Hvis den undefined så er det ingen der, ellers er det noen der.
         for (let i = 0; i < (canvasWidth / 40); i++){
             this.cells[i] = {occupied: false, unit: undefined};
         }
@@ -124,6 +128,6 @@ class Game{
     }
 }
 
-const myGame = new Game();
+//const myGame = new Game();
 
-export default myGame;
+export default Game;
