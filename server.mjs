@@ -1,9 +1,10 @@
 "use strict";
 import express from "express" 
 import USER_API from "./routes/usersRoute.mjs";
+import GAME_API from "./routes/gameRoute.mjs";
 import { Server } from "socket.io"; 
 import {createServer} from "http"; 
-import myGame from "./modules/game.mjs";
+import { games } from "./routes/gameRoute.mjs";
 //import WebSocket, {WebSocketServer} from "ws"; // HUSK Å UNINSTALLE SENERE HVIS DU ENDER OPP MED Å IKKE BRUKE DET
 
 
@@ -21,6 +22,8 @@ server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 
 server.use("/user", USER_API);
+
+server.use("/game", GAME_API);
 
 server.get("/", (req, res, next) => {
 	res.status(200).send(JSON.stringify({ msg: "These are not the droids...." })).end();
@@ -43,20 +46,28 @@ io.on("connection", (socket) =>{
 	})
 
 	socket.on("friend", () => {
-		myGame.createFriend();
+		if (games.length > 0){
+			games[0].createFriend();
 
-		io.sockets.emit("updateGame", myGame);
+			io.sockets.emit("updateGame", games[0]);
+		}
 	})
 
 	socket.on("enemy", () => {
-		myGame.createEnemy();
+		if (games.length > 0){
+			games[0].createEnemy();
 
-		io.sockets.emit("updateGame", myGame);
+			io.sockets.emit("updateGame", games[0]);
+		}
 	})
 
-	socket.on("onLoad", () => {
-		socket.emit("onLoad", myGame);
+	socket.on("loadGame", () => {
+		if (games.length > 0){
+			io.sockets.emit("loadGame", games[0]);
+		}
 	})
+	
+	
 
 	/*ws.send("Welcome new client!");
 

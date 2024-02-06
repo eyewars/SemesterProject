@@ -109,4 +109,4 @@ USER_API.delete("/:id", (req, res) => {
 	res.json({ message: 'User deleted successfully'}).end();
 })
 
-export default USER_API
+export default USER_API;

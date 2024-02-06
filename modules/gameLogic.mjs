@@ -1,6 +1,6 @@
 "use strict";
-import myGame from "./game.mjs";
 import { emitUpdate } from "../server.mjs";
+import { games } from "../routes/gameRoute.mjs";
 
 // Kanskje send disse verdiene ned til klienten og sett canvas størrelsen til det den får, så vil disse variablene bestemme det alltid istedenfor at du må oppdatere hvis du endrer
 export const canvasWidth = 1600;
@@ -12,9 +12,13 @@ function update(){
     const diff = (Date.now() - lastUpdate) / 1000;
     lastUpdate = Date.now(); 
 
-    myGame.move(diff);
+    for (let i = 0; i < games.length; i++){
+        games[i].move(diff);
+    }
    
-    emitUpdate(myGame);
+    if (games.length > 0){
+        emitUpdate(games[0]);
+    }
 }
 
 setInterval(update, 10);
