@@ -1,4 +1,5 @@
 "use strict";
+import "dotenv/config";
 import express from "express" 
 import USER_API from "./routes/usersRoute.mjs";
 import GAME_API from "./routes/gameRoute.mjs";

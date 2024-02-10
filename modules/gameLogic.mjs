@@ -10,10 +10,13 @@ let lastUpdate = Date.now();
 
 function update(){
     const diff = (Date.now() - lastUpdate) / 1000;
-    lastUpdate = Date.now(); 
+    lastUpdate = Date.now();
+
 
     for (let i = 0; i < games.length; i++){
-        games[i].move(diff);
+        games[i].timerManager(diff);
+        games[i].move();
+        games[i].fight();
     }
    
     if (games.length > 0){

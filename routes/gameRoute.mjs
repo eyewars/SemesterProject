@@ -26,5 +26,4 @@ GAME_API.post("/", gameManager.createNewGame, (req, res) => {
     }
 })
 
-
 export default GAME_API;

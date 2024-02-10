@@ -9,6 +9,10 @@ class Creature{
 
         if (randomTest >= 2){
             this.speedType = "fast";
+
+            this.health = 3;
+            this.damage = 1;
+
             if (this.type == "friend"){
                 this.color = "rgb(200, 0, 0)";
             }
@@ -18,6 +22,10 @@ class Creature{
         }
         else if(randomTest >= 1){
             this.speedType = "medium";
+
+            this.health = 6;
+            this.damage = 2;
+
             if (this.type == "friend"){
                 this.color = "rgb(0, 200, 0)";
             }
@@ -27,6 +35,10 @@ class Creature{
         }
         else{
             this.speedType = "slow";
+
+            this.health = 10;
+            this.damage = 3;
+
             if (this.type == "friend"){
                 this.color = "rgb(0, 0, 200)";
             }
@@ -49,6 +61,10 @@ class Creature{
         }
 
         this.yPos = canvasHeight - this.height;
+    }
+
+    takeDamage(damage){
+        this.health -= damage;
     }
 }
 

@@ -1,7 +1,7 @@
 "use strict";
 import express from "express";
 import User from "../modules/user.mjs";
-import HttpCodes from "../modules/httpCodes.mjs";
+import HTTPCodes from "../modules/httpCodes.mjs";
 
 const USER_API = express.Router();
 
@@ -28,7 +28,7 @@ USER_API.get("/:id", (req, res) => {
 	res.send(users[req.params.id]);
 })
 
-USER_API.post("/", (req, res) => {
+USER_API.post("/", async (req, res) => {
 	// create user
 	// This is using javascript object destructuring.
 	// Recomend reading up https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#syntax
@@ -39,7 +39,7 @@ USER_API.post("/", (req, res) => {
 	console.log(req.body);
 
 	if (username != "" && email != "" && password != "") {
-		const user = new User(username, email, password);
+		let user = new User(username, email, password);
 		//TODO: Do not save passwords!!!
 
 		//TODO: Does the user exist?
@@ -57,15 +57,16 @@ USER_API.post("/", (req, res) => {
 		}
 
 		if (!exists) {
-			users.push(user);
+			//users.push(user);
 
-			//res.status(HttpCodes.SuccesfullResponse.Ok).send(user);
-			res.json({ message: 'User registered successfully' }).end();
+			user = await user.save();
+			res.status(HTTPCodes.SuccesfullResponse.Ok).json(JSON.stringify(user)).end();
+			//res.json({ message: 'User registered successfully' }).end();
 		} else {
-			res.status(HttpCodes.ClientSideErrorResponse.BadRequest).end();
+			res.status(HTTPCodes.ClientSideErrorResponse.BadRequest).end();
 		}
 	} else {
-		res.status(HttpCodes.ClientSideErrorResponse.BadRequest).send("Mangler data felt").end();
+		res.status(HTTPCodes.ClientSideErrorResponse.BadRequest).send("Mangler data felt").end();
 	}
 })
 

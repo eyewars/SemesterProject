@@ -2,7 +2,7 @@
 // The point of this class is increasing readability and maintainability of the rest of the code. 
 // It should be extended and refactord as needed.
 
-class HttpCodes {
+class HTTPCodes {
 
 	static SuccesfullResponse = {
 		Ok: 200
@@ -18,6 +18,10 @@ class HttpCodes {
 		NotAcceptable: 406
 	}
 
+	static ServerErrorRespons = {
+        InternalError: 500,
+        NotImplemented: 501,
+    }
 }
 
-export default HttpCodes;
+export default HTTPCodes;
