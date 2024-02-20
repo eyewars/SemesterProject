@@ -1,8 +1,13 @@
 "use strict";
 import { game } from "./clientConnect.mjs";
 
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+let canvas;
+let ctx;
+
+export function setCanvas(cvs){
+    canvas = cvs;
+    ctx = canvas.getContext("2d");
+}
 
 export function drawGame(){
     ctx.clearRect(0, 0, 1600, 600);

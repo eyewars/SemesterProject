@@ -2,14 +2,27 @@
 import express from "express";
 import User from "../modules/user.mjs";
 import HTTPCodes from "../modules/httpCodes.mjs";
+import DBManager from "../modules/storageManager.mjs"
+import { createHashedPassword } from "../modules/passwordHash.mjs";
 
 const USER_API = express.Router();
 
 const users = [];
 
-USER_API.get("/", (req, res) => {
-	console.log(users);
-	res.send(users);
+USER_API.post("/login", createHashedPassword, async (req, res) => {
+	const { email, password } = req.body;
+
+	const pass = await DBManager.loginUser(email);
+
+	if (pass == password){
+		res.status(HTTPCodes.SuccesfullResponse.Ok).json({message: "Successful login"}).end();
+	}
+	else{
+		//Den meldingen som blir sendt (med send.()) blir ikke sett noen plass, finn ut av det
+		res.status(HTTPCodes.ClientSideErrorResponse.BadRequest).send("Wrong username or password").end();
+	}
+
+	res.end();
 })
 
 USER_API.get("/:id", (req, res) => {
@@ -28,7 +41,7 @@ USER_API.get("/:id", (req, res) => {
 	res.send(users[req.params.id]);
 })
 
-USER_API.post("/", async (req, res) => {
+USER_API.post("/", createHashedPassword, async (req, res) => {
 	// create user
 	// This is using javascript object destructuring.
 	// Recomend reading up https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#syntax
@@ -39,12 +52,13 @@ USER_API.post("/", async (req, res) => {
 	console.log(req.body);
 
 	if (username != "" && email != "" && password != "") {
+		
 		let user = new User(username, email, password);
 		//TODO: Do not save passwords!!!
 
 		//TODO: Does the user exist?
 		let exists = false;
-
+		/*
 		for (let i = 0; i < users.length; i++){
 			if (email == users[i].email){
 				exists = true;
@@ -55,6 +69,7 @@ USER_API.post("/", async (req, res) => {
 				break;
 			}
 		}
+		*/
 
 		if (!exists) {
 			//users.push(user);

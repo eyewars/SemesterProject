@@ -25,16 +25,17 @@ class DBManager {
 
         try {
             await client.connect();
-            const output = await client.query('Update "public"."Users" set "name" = $1, "email" = $2, "password" = $3 where id = $4;', [user.name, user.email, user.pswHash, user.id]);
+            const output = await client.query('Update "public"."Users" set "username" = $1, "email" = $2, "password" = $3 where id = $4;', [user.username, user.email, user.passwordHash, user.id]);
 
             // Client.Query returns an object of type pg.Result (https://node-postgres.com/apis/result)
             // Of special intrest is the rows and rowCount properties of this object.
 
             //TODO Did we update the user?
 
-        } catch (error) {
+        }catch(error) {
+            console.error(error);
             //TODO : Error handling?? Remember that this is a module seperate from your server 
-        } finally {
+        }finally {
             client.end(); // Always disconnect from the database.
         }
 
@@ -55,9 +56,10 @@ class DBManager {
 
             //TODO: Did the user get deleted?
 
-        } catch (error) {
+        }catch(error) {
+            console.error(error);
             //TODO : Error handling?? Remember that this is a module seperate from your server 
-        } finally {
+        }finally {
             client.end(); // Always disconnect from the database.
         }
 
@@ -69,7 +71,7 @@ class DBManager {
 
         try {
             await client.connect();
-            const output = await client.query('INSERT INTO "public"."Users"("name", "email", "password") VALUES($1::Text, $2::Text, $3::Text) RETURNING id;', [user.name, user.email, user.pswHash]);
+            const output = await client.query('INSERT INTO "public"."Users"("username", "email", "password") VALUES($1::Text, $2::Text, $3::Text) RETURNING id;', [user.username, user.email, user.passwordHash]);
 
             // Client.Query returns an object of type pg.Result (https://node-postgres.com/apis/result)
             // Of special intrest is the rows and rowCount properties of this object.
@@ -79,17 +81,36 @@ class DBManager {
                 user.id = output.rows[0].id;
             }
 
-        } catch (error) {
+        }catch(error) {
             console.error(error);
             //TODO : Error handling?? Remember that this is a module seperate from your server 
-        } finally {
+        }finally {
             client.end(); // Always disconnect from the database.
         }
 
         return user;
-
     }
 
+    async loginUser(email){
+        const client = new pg.Client(this.#credentials);
+        let pass;
+        try {
+            await client.connect();
+            //const output = await client.query('SELECT * FROM "public"."Users"("email", "password") VALUES($1::Text, $2::Text) RETURNING email, password;', [email, password]);
+            const output = await client.query('SELECT password FROM "public"."Users" WHERE email = $1;', [email]);
+
+            if (output.rows.length == 1){
+                pass = output.rows[0].password;
+            }
+
+        }catch(error){
+            console.error(error);
+        }finally{
+            client.end(); // Always disconnect from the database.
+        }
+
+        return pass;
+    }
 }
 
 export default new DBManager(process.env.DB_CONNECTIONSTRING);

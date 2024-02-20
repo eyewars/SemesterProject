@@ -42,10 +42,6 @@ export function emitUpdate(game){
 io.on("connection", (socket) =>{
 	console.log("User connected: " + socket.id);
 
-	socket.on("message", (data) => {
-		socket.broadcast.emit("message", data);
-	})
-
 	socket.on("friend", () => {
 		if (games.length > 0){
 			games[0].createFriend();

@@ -8,88 +8,95 @@
 	</head>
 
 	<body>
-		<canvas id="canvas" width="1600" height="600" style="border: 1px solid blue"></canvas>
-		<br>
-		<button id="spawnFriendButton">Spawn Friend</button>
-		<button id="spawnEnemyButton">Spawn Enemy</button>
-		<button id="testMessageButton">Send Message</button>
+		<div id="container"></div>
+
+		<template id="gameTemplate">
+			<canvas id="canvas" width="1600" height="600" style="border: 1px solid blue"></canvas>
+			<br>
+			<button id="spawnFriendButton">Spawn Friend</button>
+			<button id="spawnEnemyButton">Spawn Enemy</button>
+			<button id="testMessageButton">Send Message</button>
+		</template>
 		
-		<br>
-		<br>
-		<button id="startGameButton">Start Game</button>
-
-		<h1 id="testMessage">Heisann!</h1>
-		<button>Login</button>
-		<br>
-		<button>Register</button>
-
-		<br>
-		<br>
-
-		<form id="registerForm">
-			<label>Username:
-				<input type="text" name="username">
-			</label>
+		<template id="startTemplate">
+			<button id="startGameButton">Start Game</button>
+		</template>
+		
+		<template id="indexTemplate">
+			<h1 id="testMessage">Heisann!</h1>
+			<button id="loginButton">Login</button>
 			<br>
-			<label>Email:
-				<input type="text" name="email">
-			</label>
-			<br>
-			<label>Password:
-				<input type="text" name="password">
-			</label>
-			<br>
-			<button type="submit">Create User</button>
-		</form>
+			<button id="registerButton">Register</button>
+		</template>
 
-		<br>
+		<template id="loginTemplate">
+			<form id="loginForm">
+				<label>Email:
+					<input type="text" name="email">
+				</label>
+				<br>
+				<label>Password:
+					<input type="password" name="password">
+				</label>
+				<br>
+				<button type="submit">Login</button>
+			</form>
+		</template>
 
-		<form id="updateForm">
-			<label>ID:
-				<input type="text" name="id">
-			</label>
-			<br>
-			<label>Username:
-				<input type="text" name="username">
-			</label>
-			<br>
-			<label>Email:
-				<input type="text" name="email">
-			</label>
-			<br>
-			<label>Password:
-				<input type="text" name="password">
-			</label>
-			<br>
-			<button type="submit">Update User</button>
-		</form>
+		<template id="registerTemplate">
+			<form id="registerForm">
+				<label>Username:
+					<input type="text" name="username">
+				</label>
+				<br>
+				<label>Email:
+					<input type="text" name="email">
+				</label>
+				<br>
+				<label>Password:
+					<input type="password" name="password">
+				</label>
+				<br>
+				<button type="submit">Create User</button>
+			</form>
+		</template>
 
-		<br>
-
-		<form id="getForm">
-			<label>ID:
-				<input type="text" name="id">
-			</label>
-			<br>
-			<button type="submit">Get User</button>
-		</form>
-
-		<br>
-
-		<button id="getAllUsers">Get all users</button>
-
-		<br>
-		<br>
-
-		<form id="deleteForm">
-			<label>ID:
-				<input type="text" name="id">
-			</label>
-			<br>
-			<button type="submit">Delete User</button>
-		</form>
+		<template id="updateTemplate">
+			<form id="updateForm">
+				<label>ID:
+					<input type="text" name="id">
+				</label>
+				<br>
+				<label>Username:
+					<input type="text" name="username">
+				</label>
+				<br>
+				<label>Email:
+					<input type="text" name="email">
+				</label>
+				<br>
+				<label>Password:
+					<input type="password" name="password">
+				</label>
+				<br>
+				<button type="submit">Update User</button>
+			</form>
+		</template>
+	
+		<template id="deleteTemplate">
+			<form id="deleteForm">
+				<label>ID:
+					<input type="text" name="id">
+				</label>
+				<br>
+				<button type="submit">Delete User</button>
+			</form>
+		</template>
+		
 	</body>
+	<script src="templateManager.mjs" type="module"></script>
 	<script src="loginForms.mjs" type="module"></script>
 	<script src="draw.mjs" type="module"></script>
 	<script src="clientConnect.mjs" type="module"></script>
+
 </html>

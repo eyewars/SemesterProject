@@ -1,9 +1,10 @@
 "use strict";
-const registerForm = document.getElementById("registerForm");
-const updateForm = document.getElementById("updateForm");
-const getForm = document.getElementById("getForm");
-const deleteForm = document.getElementById("deleteForm");
-const allUsersButton = document.getElementById("getAllUsers");
+/*
+const registerForm = container.getElementById("registerForm");
+const updateForm = container.getElementById("updateForm");
+const getForm = container.getElementById("getForm");
+const deleteForm = container.getElementById("deleteForm");
+const allUsersButton = container.getElementById("getAllUsers");
 
 registerForm.addEventListener("submit", async (event) => {
 	event.preventDefault();
@@ -122,3 +123,4 @@ allUsersButton.addEventListener("click", async (event) => {
 		console.log(error);
 	}
 })
+*/
