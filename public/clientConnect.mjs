@@ -4,7 +4,15 @@ import { drawGame } from "./draw.mjs";
 //import { createFriend, createEnemy} from "./draw.mjs";
 import { createUI, gameTemplate } from "./templateManager.mjs";
 
-export const socket = io("http://localhost:8080");
+export let socket;
+
+if (location.hostname == "localhost"){
+    socket = io("http://localhost:8080");
+}
+else {
+    socket = io("https://semesterproject-24ul.onrender.com/");
+}
+
 //const socket = new WebSocket("ws://localhost:8080");
 
 export let game = {};
