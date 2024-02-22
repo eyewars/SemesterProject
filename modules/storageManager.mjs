@@ -19,13 +19,13 @@ class DBManager {
 
     }
 
-    async updateUser(user) {
+    async updateUser(user, id) {
 
         const client = new pg.Client(this.#credentials);
 
         try {
             await client.connect();
-            const output = await client.query('Update "public"."Users" set "username" = $1, "email" = $2, "password" = $3 where id = $4;', [user.username, user.email, user.passwordHash, user.id]);
+            const output = await client.query('UPDATE "public"."Users" SET username = $1, email = $2, password = $3 WHERE id = $4;', [user.username, user.email, user.passwordHash, id]);
 
             // Client.Query returns an object of type pg.Result (https://node-postgres.com/apis/result)
             // Of special intrest is the rows and rowCount properties of this object.
@@ -39,17 +39,25 @@ class DBManager {
             client.end(); // Always disconnect from the database.
         }
 
-        return user;
-
+        //return user;
     }
 
-    async deleteUser(user) {
+    async deleteUser(id) {
 
         const client = new pg.Client(this.#credentials);
 
+        let gotDeleted;
+
         try {
             await client.connect();
-            const output = await client.query('Delete from "public"."Users"  where id = $1;', [user.id]);
+            const output = await client.query('DELETE FROM "public"."Users" WHERE id = $1;', [id]);
+
+            if (output.rowCount == 0){
+                gotDeleted = false;
+            }
+            else {
+                gotDeleted = true;
+            }
 
             // Client.Query returns an object of type pg.Result (https://node-postgres.com/apis/result)
             // Of special intrest is the rows and rowCount properties of this object.
@@ -62,8 +70,7 @@ class DBManager {
         }finally {
             client.end(); // Always disconnect from the database.
         }
-
-        return user;
+        return gotDeleted;
     }
 
     async createUser(user) {
@@ -76,6 +83,7 @@ class DBManager {
             // Client.Query returns an object of type pg.Result (https://node-postgres.com/apis/result)
             // Of special intrest is the rows and rowCount properties of this object.
 
+            // Kan sikkert bare fjerne ifen, det vil alltid bare være 1 uansett
             if (output.rows.length == 1) {
                 // We stored the user in the DB.
                 user.id = output.rows[0].id;
@@ -93,12 +101,14 @@ class DBManager {
 
     async loginUser(email){
         const client = new pg.Client(this.#credentials);
+
         let pass;
+
         try {
             await client.connect();
-            //const output = await client.query('SELECT * FROM "public"."Users"("email", "password") VALUES($1::Text, $2::Text) RETURNING email, password;', [email, password]);
             const output = await client.query('SELECT password FROM "public"."Users" WHERE email = $1;', [email]);
 
+            // Kan sikkert bare fjerne ifen, det vil alltid bare være 1 uansett
             if (output.rows.length == 1){
                 pass = output.rows[0].password;
             }
@@ -110,6 +120,54 @@ class DBManager {
         }
 
         return pass;
+    }
+
+    async getUser(id){
+        const client = new pg.Client(this.#credentials);
+
+        let user;
+
+        try {
+            await client.connect();
+            const output = await client.query('SELECT * FROM "public"."Users" WHERE id = $1;', [id]);
+
+            // Client.Query returns an object of type pg.Result (https://node-postgres.com/apis/result)
+            // Of special intrest is the rows and rowCount properties of this object.
+
+            user = output.rows[0];
+
+        }catch(error) {
+            console.error(error);
+            //TODO : Error handling?? Remember that this is a module seperate from your server 
+        }finally {
+            client.end(); // Always disconnect from the database.
+        }
+
+        return user;
+    }
+
+    async getId(email){
+        const client = new pg.Client(this.#credentials);
+
+        let id;
+
+        try {
+            await client.connect();
+            const output = await client.query('SELECT id FROM "public"."Users" WHERE email = $1;', [email]);
+
+            // Client.Query returns an object of type pg.Result (https://node-postgres.com/apis/result)
+            // Of special intrest is the rows and rowCount properties of this object.
+
+            id = output.rows[0].id;
+
+        }catch(error) {
+            console.error(error);
+            //TODO : Error handling?? Remember that this is a module seperate from your server 
+        }finally {
+            client.end(); // Always disconnect from the database.
+        }
+
+        return id;
     }
 }
 

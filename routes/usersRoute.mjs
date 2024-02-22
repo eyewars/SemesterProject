@@ -15,30 +15,23 @@ USER_API.post("/login", createHashedPassword, async (req, res) => {
 	const pass = await DBManager.loginUser(email);
 
 	if (pass == password){
-		res.status(HTTPCodes.SuccesfullResponse.Ok).json({message: "Successful login"}).end();
+		const id = await DBManager.getId(email);
+
+		res.status(HTTPCodes.SuccesfullResponse.Ok).json({message: "Successful login", id: id}).end();
 	}
 	else{
 		//Den meldingen som blir sendt (med send.()) blir ikke sett noen plass, finn ut av det
 		res.status(HTTPCodes.ClientSideErrorResponse.BadRequest).send("Wrong username or password").end();
 	}
-
-	res.end();
 })
 
-USER_API.get("/:id", (req, res) => {
+USER_API.get("/:id", async (req, res) => {
 	// Tip: All the information you need to get the id part of the request can be found in the documentation 
 	// https://expressjs.com/en/guide/routing.html (Route parameters)
 
-	/// TODO: 
-	// Return user object
+	const userInfo = await DBManager.getUser(req.params.id);
 
-	if (req.params.id >= users.length) {
-		res.json({ message: 'ID not valid' }).end();
-		return;
-	}
-
-	console.log(users[req.params.id]);
-	res.send(users[req.params.id]);
+	res.send(userInfo);
 })
 
 USER_API.post("/", createHashedPassword, async (req, res) => {
@@ -85,44 +78,50 @@ USER_API.post("/", createHashedPassword, async (req, res) => {
 	}
 })
 
-USER_API.put("/:id", (req, res) => {
+USER_API.put("/:id", createHashedPassword, async (req, res) => {
 	//TODO: edit user
 
-	if (req.params.id >= users.length) {
-		res.end();
-		return;
+	const userInfo = await DBManager.getUser(req.params.id);
+
+	let { username, email, password } = req.body;
+
+	if (username == ""){
+		username = userInfo.username;
+	}
+	if (email == ""){
+		email = userInfo.email;
+	}
+	if (password == ""){
+		password = userInfo.password;
 	}
 
-	let tempUser = users[req.params.id];
+	const tempUser = new User(username, email, password);
 
-	const { username, email, password } = req.body;
+	DBManager.updateUser(tempUser, req.params.id);
 
-	if (username != "") {
-		tempUser.username = username;
-	}
-
-	if (email != "") {
-		tempUser.email = email;
-	}
-
-	if (password != "") {
-		tempUser.passwordHash = password;
-	}
-
-	users[req.params.id] = tempUser;
-	res.send(users[req.params.id]);
+	res.status(HTTPCodes.SuccesfullResponse.Ok).json({message: "Successfully updated user"}).end();
 })
 
-USER_API.delete("/:id", (req, res) => {
+USER_API.delete("/:id", async (req, res) => {
 	//TODO: Delete user
+
+	const deletion = await DBManager.deleteUser(req.params.id);
+
+	if (deletion){
+		res.json({ message: 'User deleted successfully'}).end();
+	}
+	else {
+		res.json({ message: 'User was not deleted'}).end();
+	}
+
+	/*
 
 	if (req.params.id >= users.length) {
 		res.json({ message: 'ID not valid' }).end();
 		return;
 	}
 	users.splice(req.params.id, 1);
-
-	res.json({ message: 'User deleted successfully'}).end();
+*/
 })
 
 export default USER_API;

@@ -20,11 +20,15 @@
 		
 		<template id="startTemplate">
 			<button id="startGameButton">Start Game</button>
+			<br>
+			<br>
+			<button id="settingsButton">Settings</button>
 		</template>
 		
 		<template id="indexTemplate">
 			<h1 id="testMessage">Heisann!</h1>
 			<button id="loginButton">Login</button>
+			<br>
 			<br>
 			<button id="registerButton">Register</button>
 		</template>
@@ -61,12 +65,13 @@
 			</form>
 		</template>
 
-		<template id="updateTemplate">
+		<template id="settingsTemplate">
+			<p id="myId">Id</p>
+			<p id="myUsername">Username</p>
+			<p id="myEmail">Email</p>
+			<br>
+			<p>Update User</p>
 			<form id="updateForm">
-				<label>ID:
-					<input type="text" name="id">
-				</label>
-				<br>
 				<label>Username:
 					<input type="text" name="username">
 				</label>
@@ -81,16 +86,8 @@
 				<br>
 				<button type="submit">Update User</button>
 			</form>
-		</template>
-	
-		<template id="deleteTemplate">
-			<form id="deleteForm">
-				<label>ID:
-					<input type="text" name="id">
-				</label>
-				<br>
-				<button type="submit">Delete User</button>
-			</form>
+			<br>
+			<button id="deleteButton">Delete User</button>
 		</template>
 		
 	</body>
@@ -98,5 +95,4 @@
 	<script src="loginForms.mjs" type="module"></script>
 	<script src="draw.mjs" type="module"></script>
 	<script src="clientConnect.mjs" type="module"></script>
-
 </html>
