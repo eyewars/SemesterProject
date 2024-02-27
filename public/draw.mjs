@@ -10,6 +10,7 @@ export function setCanvas(cvs){
 }
 
 export function drawGame(){
+    //CTX ER UNDEFINED I SÅNN EN FRAME, JEG TROR DRAWGAME SKJER FØR SETCANVAS
     ctx.clearRect(0, 0, 1600, 600);
 
     for (let i = 0; i < game.friends.length; i++){

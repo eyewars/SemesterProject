@@ -4,6 +4,7 @@ import User from "../modules/user.mjs";
 import HTTPCodes from "../modules/httpCodes.mjs";
 import DBManager from "../modules/storageManager.mjs"
 import { createHashedPassword } from "../modules/passwordHash.mjs";
+import { createToken, authenticateToken } from "../modules/bearerToken.mjs";
 
 const USER_API = express.Router();
 
@@ -16,8 +17,10 @@ USER_API.post("/login", createHashedPassword, async (req, res) => {
 
 	if (pass == password){
 		const id = await DBManager.getId(email);
+		
+		const token = createToken(id);
 
-		res.status(HTTPCodes.SuccesfullResponse.Ok).json({message: "Successful login", id: id}).end();
+		res.status(HTTPCodes.SuccesfullResponse.Ok).json({message: "Successful login", token: token}).end();
 	}
 	else{
 		//Den meldingen som blir sendt (med send.()) blir ikke sett noen plass, finn ut av det
@@ -25,11 +28,15 @@ USER_API.post("/login", createHashedPassword, async (req, res) => {
 	}
 })
 
-USER_API.get("/:id", async (req, res) => {
+USER_API.get("/isLoggedIn", authenticateToken, async (req, res) => {
+	res.status(200).end();
+})
+
+USER_API.get("/", authenticateToken, async (req, res) => {
 	// Tip: All the information you need to get the id part of the request can be found in the documentation 
 	// https://expressjs.com/en/guide/routing.html (Route parameters)
 
-	const userInfo = await DBManager.getUser(req.params.id);
+	const userInfo = await DBManager.getUser(req.token.userId);
 
 	res.send(userInfo);
 })
@@ -78,10 +85,10 @@ USER_API.post("/", createHashedPassword, async (req, res) => {
 	}
 })
 
-USER_API.put("/:id", createHashedPassword, async (req, res) => {
+USER_API.put("/", authenticateToken, createHashedPassword, async (req, res) => {
 	//TODO: edit user
 
-	const userInfo = await DBManager.getUser(req.params.id);
+	const userInfo = await DBManager.getUser(req.token.userId);
 
 	let { username, email, password } = req.body;
 
@@ -97,15 +104,15 @@ USER_API.put("/:id", createHashedPassword, async (req, res) => {
 
 	const tempUser = new User(username, email, password);
 
-	DBManager.updateUser(tempUser, req.params.id);
+	DBManager.updateUser(tempUser, req.token.userId);
 
 	res.status(HTTPCodes.SuccesfullResponse.Ok).json({message: "Successfully updated user"}).end();
 })
 
-USER_API.delete("/:id", async (req, res) => {
+USER_API.delete("/", authenticateToken, async (req, res) => {
 	//TODO: Delete user
 
-	const deletion = await DBManager.deleteUser(req.params.id);
+	const deletion = await DBManager.deleteUser(req.token.userId);
 
 	if (deletion){
 		res.json({ message: 'User deleted successfully'}).end();

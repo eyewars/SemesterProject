@@ -6,13 +6,10 @@ import GAME_API from "./routes/gameRoute.mjs";
 import { Server } from "socket.io"; 
 import {createServer} from "http"; 
 import { games } from "./routes/gameRoute.mjs";
-//import WebSocket, {WebSocketServer} from "ws"; // HUSK Å UNINSTALLE SENERE HVIS DU ENDER OPP MED Å IKKE BRUKE DET
-
 
 const server = express();
 const superServer = createServer(server);
 const io = new Server(superServer);
-//const wss = new WebSocketServer({server: superServer});
 
 const port = (process.env.PORT || 8080);
 server.set("port", port);
@@ -63,22 +60,4 @@ io.on("connection", (socket) =>{
 			io.sockets.emit("loadGame", games[0]);
 		}
 	})
-	
-	
-
-	/*ws.send("Welcome new client!");
-
-	ws.on("message", (data, isBinary) => {
-		console.log("The message is: " + data);
-		
-		wss.clients.forEach(function each(client) {
-			if (client !== ws && client.readyState === WebSocket.OPEN) {
-			  client.send(data, { binary: isBinary });
-			}
-		});
-	})
-
-	ws.on("close", () => {
-		console.log("User disconnected!");
-	})*/
 })

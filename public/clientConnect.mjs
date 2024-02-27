@@ -1,7 +1,6 @@
 "use strict";
 import { io } from "https://cdn.socket.io/4.7.4/socket.io.esm.min.js";
 import { drawGame } from "./draw.mjs";
-//import { createFriend, createEnemy} from "./draw.mjs";
 import { createUI, gameTemplate } from "./templateManager.mjs";
 
 export let socket;
@@ -12,8 +11,6 @@ if (location.hostname == "localhost"){
 else {
     socket = io("https://semesterproject-24ul.onrender.com/");
 }
-
-//const socket = new WebSocket("ws://localhost:8080");
 
 export let game = {};
 

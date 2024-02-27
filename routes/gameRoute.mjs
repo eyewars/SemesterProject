@@ -3,6 +3,7 @@
 import express from "express";
 import Game from "../modules/game.mjs";
 import GameManager from "../modules/gameManager.mjs";
+import { authenticateToken } from "../modules/bearerToken.mjs";
 
 const GAME_API = express.Router();
 
@@ -15,7 +16,7 @@ GAME_API.get("/", (req, res) => {
 	res.send(games);
 })
 
-GAME_API.post("/", gameManager.createNewGame, (req, res) => {
+GAME_API.post("/", authenticateToken, gameManager.createNewGame, (req, res) => {
     if (res.locals.startGame){
         games.push(new Game(res.locals.player1, res.locals.player2));
 

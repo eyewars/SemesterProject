@@ -15,7 +15,7 @@ class GameManager{
     }
 
     createNewGame = (req, res, next) => {
-        this.#players.push("TestPlayer" + (this.#players.length + 1));
+        this.#players.push(req.token.userId);
 
         if (this.#players.length > 2){
             console.log("Noe har gått jævlig galt, det er mer enn 2 spillere!");

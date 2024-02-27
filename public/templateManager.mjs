@@ -38,9 +38,14 @@ export function createUI(template){
         const startGameButton = container.querySelector("#startGameButton");
         const settingsButton = container.querySelector("#settingsButton");
 
+        const token = localStorage.getItem("token");
+
         startGameButton.addEventListener("click", async () => {
             const requestOptions = {
-                method: "POST"
+                method: "POST",
+                headers: {
+                    authorization: token,
+                }
             }
         
             try {
@@ -110,7 +115,7 @@ export function createUI(template){
         
                 let data = await response.json();
                 console.log(data.message);
-                localStorage.setItem("tempUserId", data.id);
+                localStorage.setItem("token", data.token);
                 createUI(startTemplate);
             } catch (error) {
                 console.error(error);
@@ -124,16 +129,19 @@ export function createUI(template){
         const myUsername = container.querySelector("#myUsername");
         const myEmail = container.querySelector("#myEmail");
 
-        const id = localStorage.getItem("tempUserId");
+        const token = localStorage.getItem("token");
 
         async function getUserInfo(){
             
             const requestOptions = {
-                method: "GET"
+                method: "GET",
+                headers: {
+                    authorization: token,
+                }
             }
 
             try {
-                let response = await fetch("/user/" + id, requestOptions);
+                let response = await fetch("/user", requestOptions);
         
                 if (response.status != 200) {
                     throw new Error("Error: " + response.status);
@@ -157,11 +165,14 @@ export function createUI(template){
         
             const requestOptions = {
                 method: "PUT",
-                body: formData
+                body: formData,
+                headers: {
+                    authorization: token,
+                }
             }
         
             try {
-                let response = await fetch("/user/" + id, requestOptions);
+                let response = await fetch("/user", requestOptions);
         
                 if (response.status != 200) {
                     throw new Error("Error: " + response.status);
@@ -180,10 +191,13 @@ export function createUI(template){
 
             const requestOptions = {
                 method: "DELETE",
+                headers: {
+                    authorization: token,
+                }
             }
         
             try {
-                let response = await fetch("/user/" + id, requestOptions);
+                let response = await fetch("/user", requestOptions);
         
                 if (response.status != 200) {
                     throw new Error("Error: " + response.status);
@@ -198,4 +212,58 @@ export function createUI(template){
         })
     }
 }
-createUI(indexTemplate);
+
+async function loadInitialPage(){
+    const token = localStorage.getItem("token");
+
+    const requestOptions = {
+        method: "GET",
+        headers: {
+            authorization: token,
+        }
+    }
+
+    try {
+        let response = await fetch("/user/isLoggedIn", requestOptions);
+
+        if (response.status != 200) {
+            createUI(indexTemplate);
+        }
+        else{
+            createUI(startTemplate);
+        }
+
+    } catch (error) {
+        console.error(error);
+    }
+}
+loadInitialPage();
+
+
+/*
+const page = localStorage.getItem("page");
+
+switch(page){
+    case "index":
+        createUI(indexTemplate);
+        break;
+    case "game":
+        createUI(gameTemplate);
+        break;
+    case "start":
+        createUI(startTemplate);
+        break;
+    case "register":
+        createUI(registerTemplate);
+        break;
+    case "login":
+        createUI(loginTemplate);
+        break;
+    case "settings":
+        createUI(settingsTemplate);
+        break;
+    default:
+        createUI(indexTemplate);
+        break;
+}
+*/
