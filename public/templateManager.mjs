@@ -6,7 +6,7 @@ export const container = document.getElementById("container");
 
 const indexTemplate = document.getElementById("indexTemplate");
 export const gameTemplate = document.getElementById("gameTemplate");
-const startTemplate = document.getElementById("startTemplate");
+export const startTemplate = document.getElementById("startTemplate");
 const loginTemplate = document.getElementById("loginTemplate");
 const registerTemplate = document.getElementById("registerTemplate");
 const settingsTemplate = document.getElementById("settingsTemplate");
@@ -28,12 +28,36 @@ export function createUI(template){
     } else if (template == gameTemplate){
         setCanvas(container.querySelector("#canvas"));
 
-        container.querySelector("#spawnFriendButton").addEventListener("click", () => {
-            socket.emit("friend");
+        const token = localStorage.getItem("token");
+        let id;
+
+        async function getId(){
+            const requestOptions = {
+                method: "GET",
+                headers: {
+                    authorization: token,
+                }
+            }
+        
+            try {
+                let response = await fetch("/game/getId", requestOptions);
+        
+                if (response.status != 200) {
+                    throw new Error("Error: " + response.status);
+                }
+        
+                let data = await response.json();
+                id = data.id;
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        getId();
+
+        container.querySelector("#summonUnitButton").addEventListener("click", () => {
+            socket.emit("summon", id);
         });
-        container.querySelector("#spawnEnemyButton").addEventListener("click", () => {
-            socket.emit("enemy");
-        });
+        
     } else if (template == startTemplate){
         const startGameButton = container.querySelector("#startGameButton");
         const settingsButton = container.querySelector("#settingsButton");
@@ -57,9 +81,9 @@ export function createUI(template){
                 }
         
                 let data = await response.json();
-                console.log(data);
+                console.log(data.message);
         
-                socket.emit("loadGame");
+                socket.emit("loadGame", data.id);
             } catch (error) {
                 console.error(error);
             }
@@ -238,32 +262,3 @@ async function loadInitialPage(){
     }
 }
 loadInitialPage();
-
-
-/*
-const page = localStorage.getItem("page");
-
-switch(page){
-    case "index":
-        createUI(indexTemplate);
-        break;
-    case "game":
-        createUI(gameTemplate);
-        break;
-    case "start":
-        createUI(startTemplate);
-        break;
-    case "register":
-        createUI(registerTemplate);
-        break;
-    case "login":
-        createUI(loginTemplate);
-        break;
-    case "settings":
-        createUI(settingsTemplate);
-        break;
-    default:
-        createUI(indexTemplate);
-        break;
-}
-*/

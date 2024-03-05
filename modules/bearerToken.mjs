@@ -2,13 +2,11 @@
 import jwt from "jsonwebtoken";
 import HTTPCodes from "./httpCodes.mjs";
 
-// Generate and issue a bearer token
 export function createToken(userId) {
-	const token = jwt.sign({ userId }, process.env.TOKEN_SECRET, { expiresIn: '1h' });
+	const token = jwt.sign({ userId }, process.env.TOKEN_SECRET, { expiresIn: '12h' });
 	return token;
 }
 
-// Middleware for bearer token authentication
 export function authenticateToken(req, res, next) {
 	const token = req.headers['authorization'];
   
@@ -21,7 +19,6 @@ export function authenticateToken(req, res, next) {
 			return res.sendStatus(HTTPCodes.ClientSideErrorResponse.Forbidden);
 		}
   
-		// Add the decoded information to the request object
 		req.token = decoded;
 		next();
 	});

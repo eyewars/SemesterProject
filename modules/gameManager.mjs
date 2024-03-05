@@ -1,4 +1,5 @@
 "use strict";
+import { gameLookup } from "../routes/gameRoute.mjs";
 
 class GameManager{
     static instance = null;
@@ -15,20 +16,28 @@ class GameManager{
     }
 
     createNewGame = (req, res, next) => {
-        this.#players.push(req.token.userId);
+        const gameIndex = gameLookup[req.token.userId];
 
-        if (this.#players.length > 2){
-            console.log("Noe har gått jævlig galt, det er mer enn 2 spillere!");
+        if (gameIndex != undefined){
+            next();
         }
-        else if (this.#players.length == 2){
-            res.locals.startGame = true;
-            res.locals.player1 = this.#players[0];
-            res.locals.player2 = this.#players[1];
+        else {
+            this.#players.push(req.token.userId);
+            console.log(this.#players);
 
-            this.#players = [];
-        }
+            if (this.#players.length > 2){
+                console.log("Noe har gått jævlig galt, det er mer enn 2 spillere!");
+            }
+            else if (this.#players.length == 2){
+                res.locals.startGame = true;
+                res.locals.player1Id = this.#players[0];
+                res.locals.player2Id = this.#players[1];
 
-        next();
+                this.#players = [];
+            }
+
+            next(); 
+        }   
     }
 }
 

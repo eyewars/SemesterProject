@@ -4,9 +4,9 @@ import Castle from "./castle.mjs";
 import { canvasWidth } from "./gameLogic.mjs";
 
 class Game{
-    constructor(player1, player2){
-        this.player1 = player1;
-        this.player2 = player2;
+    constructor(player1Id, player2Id){
+        this.player1Id = player1Id;
+        this.player2Id = player2Id;
 
         this.friends = [];
         this.enemies = [];
@@ -32,12 +32,13 @@ class Game{
         this.fastTimerReached = false;
     } 
 
-    createFriend(){
-        this.friends.push(new Creature("friend"));
-    }
-    
-    createEnemy(){
-        this.enemies.push(new Creature("enemy"));
+    summonUnit(playerId){
+        if (playerId == this.player1Id){
+            this.friends.push(new Creature("friend"));
+        }
+        else {
+            this.enemies.push(new Creature("enemy"));
+        }
     }
 
     timerManager(diff){
@@ -76,7 +77,7 @@ class Game{
 
                     this.enemyCastle.takeDamage(1);
 
-                    console.log("Enemy Castle Health: " + this.enemyCastle.health);
+                    //console.log("Enemy Castle Health: " + this.enemyCastle.health);
                 }
                 else if (this.cells[friend.myCell + 1] == undefined){
 
@@ -107,7 +108,7 @@ class Game{
 
                     this.friendCastle.takeDamage(1);
 
-                    console.log("Friend Castle Health: " + this.friendCastle.health);
+                    //console.log("Friend Castle Health: " + this.friendCastle.health);
                 }
                 else if (this.cells[enemy.myCell - 1] == undefined){
 
@@ -181,8 +182,16 @@ class Game{
 
         this.unitsThatWillAttack = [];
     }
-}
 
-//const myGame = new Game();
+    gameHasEnded(){
+        if (this.friendCastle.health <= 0){
+            return "enemy";
+        }
+        else if (this.enemyCastle.health <= 0){
+            return "friend";
+        }
+        return false;
+    }
+}
 
 export default Game;

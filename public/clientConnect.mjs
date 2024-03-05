@@ -1,7 +1,7 @@
 "use strict";
 import { io } from "https://cdn.socket.io/4.7.4/socket.io.esm.min.js";
 import { drawGame } from "./draw.mjs";
-import { createUI, gameTemplate } from "./templateManager.mjs";
+import { createUI, gameTemplate, startTemplate } from "./templateManager.mjs";
 
 export let socket;
 
@@ -22,6 +22,7 @@ socket.on("loadGame", (data) => {
     createUI(gameTemplate);
     game = data;
     requestAnimationFrame(drawGame);
+    console.log("Nå loada jeg!");
 })
 
 socket.on("updateGame", (data) => {
@@ -29,10 +30,11 @@ socket.on("updateGame", (data) => {
     requestAnimationFrame(drawGame);
 })
 
-
-
-
-
+socket.on("leaveRoom", (room) => {
+    socket.emit("leaveRoom", room);
+    console.log("Nå leavea jeg!");
+    createUI(startTemplate);
+})
 
 
 
