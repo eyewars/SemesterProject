@@ -27,37 +27,6 @@ export function createUI(template){
         })
     } else if (template == gameTemplate){
         setCanvas(container.querySelector("#canvas"));
-
-        const token = localStorage.getItem("token");
-        let id;
-
-        async function getId(){
-            const requestOptions = {
-                method: "GET",
-                headers: {
-                    authorization: token,
-                }
-            }
-        
-            try {
-                let response = await fetch("/game/getId", requestOptions);
-        
-                if (response.status != 200) {
-                    throw new Error("Error: " + response.status);
-                }
-        
-                let data = await response.json();
-                id = data.id;
-            } catch (error) {
-                console.error(error);
-            }
-        }
-        getId();
-
-        container.querySelector("#summonUnitButton").addEventListener("click", () => {
-            socket.emit("summon", id);
-        });
-        
     } else if (template == startTemplate){
         const startGameButton = container.querySelector("#startGameButton");
         const settingsButton = container.querySelector("#settingsButton");

@@ -5,7 +5,7 @@ class Castle{
     constructor(type){
         this.type = type;
 
-        this.health = 10;
+        this.health = 100;
 
         this.width = 120;
         this.height = 160;

@@ -28,9 +28,11 @@ function update(){
             leaveRoom("game" + key);
 
             console.log(ongoingGamesLookup);
+
             delete gameLookup[games[key].player1Id];
             delete gameLookup[games[key].player2Id];
             delete ongoingGamesLookup[key];
+            
             console.log(ongoingGamesLookup);
         }
     })

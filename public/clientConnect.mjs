@@ -2,6 +2,7 @@
 import { io } from "https://cdn.socket.io/4.7.4/socket.io.esm.min.js";
 import { drawGame } from "./draw.mjs";
 import { createUI, gameTemplate, startTemplate } from "./templateManager.mjs";
+import { getPlayer } from "./getInfo.mjs";
 
 export let socket;
 
@@ -21,6 +22,7 @@ socket.on("connect", () => {
 socket.on("loadGame", (data) => {
     createUI(gameTemplate);
     game = data;
+    getPlayer();
     requestAnimationFrame(drawGame);
     console.log("Nå loada jeg!");
 })
@@ -35,23 +37,3 @@ socket.on("leaveRoom", (room) => {
     console.log("Nå leavea jeg!");
     createUI(startTemplate);
 })
-
-
-
-
-
-
-/*
-socket.addEventListener("open", (event) => {
-    console.log("Connected to WS Server!");
-})
-
-socket.addEventListener("message", (event) => {
-    console.log("Message from server: " + event.data);
-})
-
-function sendMessage(){
-    socket.send("YOOOOOOOOOOOOOOOO");
-}
-document.getElementById("testMessageButton").addEventListener("click", sendMessage);
-*/

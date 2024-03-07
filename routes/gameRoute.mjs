@@ -1,9 +1,9 @@
 "use strict";
-
 import express from "express";
 import Game from "../modules/game.mjs";
 import GameManager from "../modules/gameManager.mjs";
 import { authenticateToken } from "../modules/bearerToken.mjs";
+import DBManager from "../modules/storageManager.mjs"
 
 const GAME_API = express.Router();
 
@@ -13,13 +13,23 @@ export const games = [];
 export const gameLookup = {};
 export const ongoingGamesLookup = {};
 
-GAME_API.get("/getId", authenticateToken, (req, res) => {
-    res.json({id: req.token.userId});
-})
+GAME_API.get("/getPlayer", authenticateToken, async(req, res) => {
+    const gameIndex = gameLookup[req.token.userId];
+    const myGame = games[gameIndex];
 
-GAME_API.get("/", (req, res) => {
-    console.log(games);
-	res.send(games);
+    let mySide;
+    if (req.token.userId == myGame.player1Id){
+        mySide = "player1";
+    }
+    else{
+        mySide = "player2";
+    }
+
+    const friend = await DBManager.getUser(myGame.player1Id);
+    const enemy = await DBManager.getUser(myGame.player2Id);
+
+    res.json({player: mySide, id: req.token.userId, myName: friend.username, enemyName: enemy.username}).end();
+
 })
 
 GAME_API.post("/", authenticateToken, gameManager.createNewGame, (req, res) => {

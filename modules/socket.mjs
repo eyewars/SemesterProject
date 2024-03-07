@@ -8,10 +8,10 @@ export function startIo(){
     io.on("connection", (socket) =>{
         console.log("User connected: " + socket.id);
 
-        socket.on("summon", (playerId) => {
-            const gameIndex = gameLookup[playerId];
+        socket.on("summon", (data) => {
+            const gameIndex = gameLookup[data.playerId];
 
-            games[gameIndex].summonUnit(playerId);
+            games[gameIndex].summonUnit(data.playerId, data.unitId);
 
             emitUpdate(games[gameIndex], "game" + gameIndex);
         })

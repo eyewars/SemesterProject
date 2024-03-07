@@ -8,6 +8,16 @@ class Game{
         this.player1Id = player1Id;
         this.player2Id = player2Id;
 
+        this.player1Gold = 0;
+        this.player2Gold = 0;
+
+        this.player1Income = 10;
+        this.player2Income = 10;
+
+        this.unitCost = [15, 20, 20, 50, 50, 30, 150, 200, 500, 1000];
+        this.unitIncomeChange = [1, 1.3, 0.8, 0.2, 3.3, 0.1, 5, 0, -15, -50];
+        this.unitSpeed = ["slow", "medium", "fast", "medium", "slow", "fast", "medium", "slow", "medium", "fast"];
+
         this.friends = [];
         this.enemies = [];
 
@@ -15,7 +25,6 @@ class Game{
 
         this.cells = [];
 
-        // Endre til bare hvilken unit som er der / undefined. Occupied er ikke nødvendig. Hvis den undefined så er det ingen der, ellers er det noen der.
         for (let i = 0; i < (canvasWidth / 40); i++){
             this.cells[i] = undefined;
         }
@@ -27,17 +36,92 @@ class Game{
         this.mediumTimer = 0;
         this.fastTimer = 0;
 
+        this.incomeTimer = 0;
+
         this.slowTimerReached = false;
         this.mediumTimerReached = false;
         this.fastTimerReached = false;
     } 
 
-    summonUnit(playerId){
+    #getIncome(){
+        this.player1Gold += this.player1Income;
+        this.player2Gold += this.player2Income;
+    }
+
+    summonUnit(playerId, unitId){
+        let unitType;
+        let unitArr;
+        let player;
         if (playerId == this.player1Id){
-            this.friends.push(new Creature("friend"));
+            unitType = "friend";
+            unitArr = "friends";
+            player = "player1";
         }
         else {
-            this.enemies.push(new Creature("enemy"));
+            unitType = "enemy";
+            unitArr = "enemies";
+            player = "player2";
+        }
+
+        if ((unitId == 0) && (this[player + "Gold"] >= this.unitCost[unitId])){
+            this[player + "Gold"] -= this.unitCost[unitId];
+            this[player + "Income"] += this.unitIncomeChange[unitId];
+
+            this[unitArr].push(new Creature(unitType, 2, 1, this.unitSpeed[unitId], "rgb(200, 0, 0)"));
+        }
+        else if ((unitId == 1) && (this[player + "Gold"] >= this.unitCost[unitId])){
+            this[player + "Gold"] -= this.unitCost[unitId];
+            this[player + "Income"] += this.unitIncomeChange[unitId];
+
+            this[unitArr].push(new Creature(unitType, 2, 0.5, this.unitSpeed[unitId], "rgb(200, 0, 0)"));
+        }
+        else if ((unitId == 2) && (this[player + "Gold"] >= this.unitCost[unitId])){
+            this[player + "Gold"] -= this.unitCost[unitId];
+            this[player + "Income"] += this.unitIncomeChange[unitId];
+
+            this[unitArr].push(new Creature(unitType, 2, 0.25, this.unitSpeed[unitId], "rgb(200, 0, 0)"));
+        }
+        else if ((unitId == 3) && (this[player + "Gold"] >= this.unitCost[unitId])){
+            this[player + "Gold"] -= this.unitCost[unitId];
+            this[player + "Income"] += this.unitIncomeChange[unitId];
+
+            this[unitArr].push(new Creature(unitType, 6, 2, this.unitSpeed[unitId], "rgb(200, 0, 0)"));
+        }
+        else if ((unitId == 4) && (this[player + "Gold"] >= this.unitCost[unitId])){
+            this[player + "Gold"] -= this.unitCost[unitId];
+            this[player + "Income"] += this.unitIncomeChange[unitId];
+
+            this[unitArr].push(new Creature(unitType, 6, 1, this.unitSpeed[unitId], "rgb(200, 0, 0)"));
+        }
+        else if ((unitId == 5) && (this[player + "Gold"] >= this.unitCost[unitId])){
+            this[player + "Gold"] -= this.unitCost[unitId];
+            this[player + "Income"] += this.unitIncomeChange[unitId];
+
+            this[unitArr].push(new Creature(unitType, 4, 1, this.unitSpeed[unitId], "rgb(200, 0, 0)"));
+        }
+        else if ((unitId == 6) && (this[player + "Gold"] >= this.unitCost[unitId])){
+            this[player + "Gold"] -= this.unitCost[unitId];
+            this[player + "Income"] += this.unitIncomeChange[unitId];
+
+            this[unitArr].push(new Creature(unitType, 12, 4, this.unitSpeed[unitId], "rgb(200, 0, 0)"));
+        }
+        else if ((unitId == 7) && (this[player + "Gold"] >= this.unitCost[unitId])){
+            this[player + "Gold"] -= this.unitCost[unitId];
+            this[player + "Income"] += this.unitIncomeChange[unitId];
+            
+            this[unitArr].push(new Creature(unitType, 25, 8, this.unitSpeed[unitId], "rgb(200, 0, 0)"));
+        }
+        else if ((unitId == 8) && (this[player + "Gold"] >= this.unitCost[unitId])){
+            this[player + "Gold"] -= this.unitCost[unitId];
+            this[player + "Income"] += this.unitIncomeChange[unitId];
+
+            this[unitArr].push(new Creature(unitType, 60, 10, this.unitSpeed[unitId], "rgb(200, 0, 0)"));
+        }
+        else if ((unitId == 9) && (this[player + "Gold"] >= this.unitCost[unitId])){
+            this[player + "Gold"] -= this.unitCost[unitId];
+            this[player + "Income"] += this.unitIncomeChange[unitId];
+
+            this[unitArr].push(new Creature(unitType, 105, 10, this.unitSpeed[unitId], "rgb(200, 0, 0)"));
         }
     }
 
@@ -46,9 +130,13 @@ class Game{
         this.mediumTimer += 1000 * diff;
         this.fastTimer += 1000 * diff;
 
+        this.incomeTimer += 1000 * diff;
+
         this.slowTimerReached = false;
         this.mediumTimerReached = false;
         this.fastTimerReached = false;
+
+        this.incomeTimerReached = false;
 
         if (this.slowTimer >= 1000){
             this.slowTimerReached = true;
@@ -64,6 +152,12 @@ class Game{
             this.fastTimerReached = true;
             this.fastTimer -= 250;
         }
+
+        if (this.incomeTimer >= 10000){
+            this.incomeTimer -= 10000;
+
+            this.#getIncome();
+        }
     }
 
     move(){
@@ -75,9 +169,15 @@ class Game{
 
                     this.cells[friend.myCell] = undefined;
 
-                    this.enemyCastle.takeDamage(1);
+                    let speedDamageScale = 1;
+                    if (friend.speedType == "medium"){
+                        speedDamageScale = 2;
+                    }
+                    else if (friend.speedType == "fast"){
+                        speedDamageScale = 4;
+                    }
 
-                    //console.log("Enemy Castle Health: " + this.enemyCastle.health);
+                    this.enemyCastle.takeDamage(friend.damage * speedDamageScale);
                 }
                 else if (this.cells[friend.myCell + 1] == undefined){
 
@@ -106,9 +206,15 @@ class Game{
 
                     this.cells[enemy.myCell] = undefined;
 
-                    this.friendCastle.takeDamage(1);
+                    let speedDamageScale = 1;
+                    if (enemy.speedType == "medium"){
+                        speedDamageScale = 2;
+                    }
+                    else if (enemy.speedType == "fast"){
+                        speedDamageScale = 4;
+                    }
 
-                    //console.log("Friend Castle Health: " + this.friendCastle.health);
+                    this.friendCastle.takeDamage(enemy.damage * speedDamageScale);
                 }
                 else if (this.cells[enemy.myCell - 1] == undefined){
 
