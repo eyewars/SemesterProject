@@ -8,8 +8,8 @@ class Game{
         this.player1Id = player1Id;
         this.player2Id = player2Id;
 
-        this.player1Gold = 10000;
-        this.player2Gold = 10000;
+        this.player1Gold = 0;
+        this.player2Gold = 0;
 
         this.player1Income = 10;
         this.player2Income = 10;
