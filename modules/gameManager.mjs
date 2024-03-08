@@ -18,7 +18,7 @@ class GameManager{
     createNewGame = (req, res, next) => {
         const gameIndex = gameLookup[req.token.userId];
 
-        if (gameIndex != undefined){
+        if ((gameIndex != undefined) || (this.#players[0] == req.token.userId)){
             next();
         }
         else {

@@ -42,23 +42,21 @@ TODO:
 2. Øk lengden tokenen varer (er lav for testing nå)
 3. Lag bedre UI, gjør det mulig å navigere seg rundt bedre
 4. Gjør sånn at email og username må være unike (tror ikke det er sånn lenger etter jeg kobla opp mot database)
-5. Jobb videre på selve spillet
-6. Gjør sånn at man kan komme inn i spillet igjen hvis man allerede var med i et (si browseren crasha eller du refresha med et uhell eller noe)
-7. Fiks det greiene med at canvasen ikke loader i riktig rekkefølge så du får masse errors i sånn 2 frames
-8. Det er en bug som gjør at unitsa stopper å bevege seg av og til (til du sender en enemy for å fikse ting), tror kanskje det er har noe med at hvilke tiles som er opptatt blir fucka på en eller anna må
-9. Gjør sånn at vinnere vet hvem som vant ordentlig (vis det og ikke bare insta hopp til menyen, og  lagre i databasen hvor mange spill du har spillt, og hvor mange du har vunnet/tapt)
-10. Når du sletter brukeren så slett token fra localstorage
-11. Prøv å adde "Bearer" inni authorization
-12. Kanskje add sånn at du må skrive passordet ditt 2 ganger
-13. Kanskje gjør sånn at du får en ny valid token hver gang du gjør noe shit hvor du bruker en token, da vil du aldri møte på problemet at du er logga inn og så plutselig forsvinner tokenen din mens du holder på med noe og alt klikker
-14. Add en limit til brukernavn lengde (sånn at det passer i spillet, kanskje 12 tegn)
+5. Prøv å adde "Bearer" inni authorization
+6. Kanskje add sånn at du må skrive passordet ditt 2 ganger
+7. Kanskje gjør sånn at du får en ny valid token hver gang du gjør noe shit hvor du bruker en token, da vil du aldri møte på problemet at du er logga inn og så plutselig forsvinner tokenen din mens du holder på med noe og alt klikker
+8. Add en limit til brukernavn lengde (sånn at det passer i spillet, kanskje 12 tegn)
+9. Gjør sånn at når man trykker på start game kommer man til en ny skjerm, der må det være en knapp for å trekke seg ut hvis man ikke vil spille alikavel (så går man tilbake til den forrige plassen). Du burde også bli hevet ut av queuen hvis det var så og så lenge siden du trykka play. 
+10. Gjør sånn at når spillet finner en match så må begge spillere trykke accept (man har si 15 sek på seg), hvis ikke så blir spillet aborta
+11. Gjør sånn at det kommer noe opp når du skriver feil passord og sånn
 
 
 
 LISTE OVER TING SOM BURDE ADDES TIL SPILLET:
 
-1. Fiks en bug som gjør at "enemy" units vinner equal fights (de hitter sikkert først eller noe)
-2. Bytt på fargene til enemies så man kan kjenne de igjen (og add en stroke rundt de basert på om de er friend eller enemy) (kanskje fargen på den "loading" baren på knappene burde være basert på unit fargen)
-3. Gjør sånn at du ikke kan kjøpe de 2 siste ved mindre du har mer income enn du mister (sånn at du aldri blir perma fucka)
+1. Mye av teksten tar veldig lang tid før den loader når du er på nettsiden, sikkert fordi det tar ekstra lang tid å sende data fra server til klient (så du får bare masse errors om at verdiene ikke fins før det)
+2. Fiks den buggen som gjør at unitsa noen ganger bare stopper (til det kommer en enemy og de fighter) (virker som om det alltid er samme plass også)
+3. Gjør sånn at vinnere vet hvem som vant ordentlig (vis det og ikke bare insta hopp til menyen, og  lagre i databasen hvor mange spill du har spillt, og hvor mange du har vunnet/tapt)
+4. Fiks det greiene med at canvasen ikke loader i riktig rekkefølge så du får masse errors i sånn 2 frames
 
 */

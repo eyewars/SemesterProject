@@ -63,6 +63,8 @@ export function createUI(template){
         });
     } else if (template == registerTemplate){
         const registerForm = container.querySelector("#registerForm");
+        const registerBackButton = container.querySelector("#registerBackButton");
+
         registerForm.addEventListener("submit", async (event) => {
             event.preventDefault();
         
@@ -87,8 +89,14 @@ export function createUI(template){
                 console.error(error);
             }
         })
+
+        registerBackButton.addEventListener("click", (event) => {
+            createUI(indexTemplate);
+        }) 
     } else if (template == loginTemplate){
         const loginForm = container.querySelector("#loginForm");
+        const loginBackButton = container.querySelector("#loginBackButton");
+
         loginForm.addEventListener("submit", async (event) => {
             event.preventDefault();
         
@@ -114,9 +122,15 @@ export function createUI(template){
                 console.error(error);
             }
         })
+
+        loginBackButton.addEventListener("click", (event) => {
+            createUI(indexTemplate);
+        }) 
     } else if (template == settingsTemplate){
         const updateForm = container.querySelector("#updateForm");
         const deleteButton = container.querySelector("#deleteButton");
+        const logoutButton = container.querySelector("#logoutButton");
+        const settingsBackButton = container.querySelector("#settingsBackButton");
 
         const myId = container.querySelector("#myId");
         const myUsername = container.querySelector("#myUsername");
@@ -179,30 +193,44 @@ export function createUI(template){
             }
         })
 
+        logoutButton.addEventListener("click", (event) => {
+            localStorage.removeItem("token");
+
+            createUI(indexTemplate);
+        })
+
         deleteButton.addEventListener("click", async (event) => {
             event.preventDefault();
 
-            const requestOptions = {
-                method: "DELETE",
-                headers: {
-                    authorization: token,
+            if (confirm("Are you sure?")){
+                const requestOptions = {
+                    method: "DELETE",
+                    headers: {
+                        authorization: token,
+                    }
                 }
-            }
-        
-            try {
-                let response = await fetch("/user", requestOptions);
-        
-                if (response.status != 200) {
-                    throw new Error("Error: " + response.status);
+            
+                try {
+                    let response = await fetch("/user", requestOptions);
+            
+                    if (response.status != 200) {
+                        throw new Error("Error: " + response.status);
+                    }
+            
+                    let data = await response.json();
+                    console.log(data);
+
+                    localStorage.removeItem("token");
+                    createUI(indexTemplate);
+                } catch (error) {
+                    console.error(error);
                 }
-        
-                let data = await response.json();
-                console.log(data);
-                createUI(indexTemplate);
-            } catch (error) {
-                console.error(error);
             }
         })
+
+        settingsBackButton.addEventListener("click", (event) => {
+            createUI(startTemplate);
+        }) 
     }
 }
 
@@ -223,6 +251,10 @@ async function loadInitialPage(){
             createUI(indexTemplate);
         }
         else{
+            let data = await response.json();
+
+            localStorage.setItem("token", data.token);
+
             createUI(startTemplate);
         }
 

@@ -34,11 +34,21 @@ export function drawGame(){
     for (let i = 0; i < game.friends.length; i++){
         ctx.fillStyle = game.friends[i].color;
         ctx.fillRect(game.friends[i].myCell * 40, game.friends[i].yPos, game.friends[i].width, game.friends[i].height);
+
+        ctx.strokeStyle = "blue";
+        ctx.beginPath();
+        ctx.rect(game.friends[i].myCell * 40, game.friends[i].yPos, game.friends[i].width, game.friends[i].height);
+        ctx.stroke();
     }
 
     for (let i = 0; i < game.enemies.length; i++){
         ctx.fillStyle = game.enemies[i].color;
         ctx.fillRect(game.enemies[i].myCell * 40, game.enemies[i].yPos, game.enemies[i].width, game.enemies[i].height);
+
+        ctx.strokeStyle = "red";
+        ctx.beginPath();
+        ctx.rect(game.enemies[i].myCell * 40, game.enemies[i].yPos, game.enemies[i].width, game.enemies[i].height);
+        ctx.stroke();
     }
 
     ctx.fillStyle = "blue";
@@ -76,7 +86,7 @@ export function drawGame(){
     ctx.strokeStyle = "black";
 
     for (let i = 0; i < summonButtons.length; i++){
-        ctx.fillStyle = "lightgray";
+        ctx.fillStyle = game.unitColor[i];
         ctx.fillRect(summonButtons[i].x, summonButtons[i].y + summonButtons[i].height, summonButtons[i].width, -summonButtons[i].height * (summonButtons[i].timer / summonButtons[i].maxTimer));
 
         ctx.beginPath();
@@ -107,7 +117,7 @@ function getMousePosition(event){
     return mousePos;
 }
 
-const buttonMaxTimer = [500, 750, 500, 2000, 500, 2500, 1000, 7500, 30000, 60000];
+const buttonMaxTimer = [500, 750, 500, 2000, 12000, 2500, 1000, 7500, 30000, 60000];
 for (let i = 0; i < 10; i++){
     const button = {
         width: 90,

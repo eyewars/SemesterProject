@@ -29,7 +29,10 @@ USER_API.post("/login", createHashedPassword, async (req, res) => {
 })
 
 USER_API.get("/isLoggedIn", authenticateToken, async (req, res) => {
-	res.status(200).end();
+	//Hvis du allerede har en valid token når du åpner/refresher nettsiden, så vil du få en ny en. Dette er sånn at ikke tokenen din kan tilfeldigvis expiree mens du holder på med noe.
+	const newToken = createToken(req.token.userId);
+
+	res.status(200).json({token: newToken}).end();
 })
 
 USER_API.get("/", authenticateToken, async (req, res) => {

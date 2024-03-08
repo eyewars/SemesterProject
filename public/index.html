@@ -5,6 +5,7 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Prosjekt</title>
+		<link href="style.css" rel="stylesheet" type="text/css" />
 	</head>
 
 	<body>
@@ -23,7 +24,7 @@
 		</template>
 		
 		<template id="indexTemplate">
-			<h1 id="testMessage">Heisann!</h1>
+			<h1 id="testMessage">Game title</h1>
 			<button id="loginButton">Login</button>
 			<br>
 			<br>
@@ -42,6 +43,8 @@
 				<br>
 				<button type="submit">Login</button>
 			</form>
+			<br>
+			<button id="loginBackButton">Back</button>
 		</template>
 
 		<template id="registerTemplate">
@@ -60,12 +63,16 @@
 				<br>
 				<button type="submit">Create User</button>
 			</form>
+			<br>
+			<button id="registerBackButton">Back</button>
 		</template>
 
 		<template id="settingsTemplate">
 			<p id="myId">Id</p>
 			<p id="myUsername">Username</p>
 			<p id="myEmail">Email</p>
+			<br>
+			<button id="logoutButton">Log out</button>
 			<br>
 			<p>Update User</p>
 			<form id="updateForm">
@@ -85,6 +92,9 @@
 			</form>
 			<br>
 			<button id="deleteButton">Delete User</button>
+			<br>
+			<br>
+			<button id="settingsBackButton">Back</button>
 		</template>
 		
 	</body>

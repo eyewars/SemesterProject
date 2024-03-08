@@ -8,15 +8,16 @@ class Game{
         this.player1Id = player1Id;
         this.player2Id = player2Id;
 
-        this.player1Gold = 0;
-        this.player2Gold = 0;
+        this.player1Gold = 10000;
+        this.player2Gold = 10000;
 
         this.player1Income = 10;
         this.player2Income = 10;
 
         this.unitCost = [15, 20, 20, 50, 50, 30, 150, 200, 500, 1000];
-        this.unitIncomeChange = [1, 1.3, 0.8, 0.2, 3.3, 0.1, 5, 0, -15, -50];
+        this.unitIncomeChange = [1, 1.3, 0.8, 0.2, 7.5, 0.1, 5, 0, -15, -50];
         this.unitSpeed = ["slow", "medium", "fast", "medium", "slow", "fast", "medium", "slow", "medium", "fast"];
+        this.unitColor = ["#23b7e1", "#00c8bc", "#00d88d", "#63e64d", "#aceb35", "#e4d924", "#efbe25", "#f1842f", "#ec6032", "#e42233"];
 
         this.friends = [];
         this.enemies = [];
@@ -67,61 +68,61 @@ class Game{
             this[player + "Gold"] -= this.unitCost[unitId];
             this[player + "Income"] += this.unitIncomeChange[unitId];
 
-            this[unitArr].push(new Creature(unitType, 2, 1, this.unitSpeed[unitId], "rgb(200, 0, 0)"));
+            this[unitArr].push(new Creature(unitType, 2, 1, this.unitSpeed[unitId], this.unitColor[unitId]));
         }
         else if ((unitId == 1) && (this[player + "Gold"] >= this.unitCost[unitId])){
             this[player + "Gold"] -= this.unitCost[unitId];
             this[player + "Income"] += this.unitIncomeChange[unitId];
 
-            this[unitArr].push(new Creature(unitType, 2, 0.5, this.unitSpeed[unitId], "rgb(200, 0, 0)"));
+            this[unitArr].push(new Creature(unitType, 2, 0.5, this.unitSpeed[unitId], this.unitColor[unitId]));
         }
         else if ((unitId == 2) && (this[player + "Gold"] >= this.unitCost[unitId])){
             this[player + "Gold"] -= this.unitCost[unitId];
             this[player + "Income"] += this.unitIncomeChange[unitId];
 
-            this[unitArr].push(new Creature(unitType, 2, 0.25, this.unitSpeed[unitId], "rgb(200, 0, 0)"));
+            this[unitArr].push(new Creature(unitType, 2, 0.25, this.unitSpeed[unitId], this.unitColor[unitId]));
         }
         else if ((unitId == 3) && (this[player + "Gold"] >= this.unitCost[unitId])){
             this[player + "Gold"] -= this.unitCost[unitId];
             this[player + "Income"] += this.unitIncomeChange[unitId];
 
-            this[unitArr].push(new Creature(unitType, 6, 2, this.unitSpeed[unitId], "rgb(200, 0, 0)"));
+            this[unitArr].push(new Creature(unitType, 6, 2, this.unitSpeed[unitId], this.unitColor[unitId]));
         }
         else if ((unitId == 4) && (this[player + "Gold"] >= this.unitCost[unitId])){
             this[player + "Gold"] -= this.unitCost[unitId];
             this[player + "Income"] += this.unitIncomeChange[unitId];
 
-            this[unitArr].push(new Creature(unitType, 6, 1, this.unitSpeed[unitId], "rgb(200, 0, 0)"));
+            this[unitArr].push(new Creature(unitType, 6, 1, this.unitSpeed[unitId], this.unitColor[unitId]));
         }
         else if ((unitId == 5) && (this[player + "Gold"] >= this.unitCost[unitId])){
             this[player + "Gold"] -= this.unitCost[unitId];
             this[player + "Income"] += this.unitIncomeChange[unitId];
 
-            this[unitArr].push(new Creature(unitType, 4, 1, this.unitSpeed[unitId], "rgb(200, 0, 0)"));
+            this[unitArr].push(new Creature(unitType, 4, 1, this.unitSpeed[unitId], this.unitColor[unitId]));
         }
         else if ((unitId == 6) && (this[player + "Gold"] >= this.unitCost[unitId])){
             this[player + "Gold"] -= this.unitCost[unitId];
             this[player + "Income"] += this.unitIncomeChange[unitId];
 
-            this[unitArr].push(new Creature(unitType, 12, 4, this.unitSpeed[unitId], "rgb(200, 0, 0)"));
+            this[unitArr].push(new Creature(unitType, 12, 4, this.unitSpeed[unitId], this.unitColor[unitId]));
         }
         else if ((unitId == 7) && (this[player + "Gold"] >= this.unitCost[unitId])){
             this[player + "Gold"] -= this.unitCost[unitId];
             this[player + "Income"] += this.unitIncomeChange[unitId];
             
-            this[unitArr].push(new Creature(unitType, 25, 8, this.unitSpeed[unitId], "rgb(200, 0, 0)"));
+            this[unitArr].push(new Creature(unitType, 25, 8, this.unitSpeed[unitId], this.unitColor[unitId]));
         }
-        else if ((unitId == 8) && (this[player + "Gold"] >= this.unitCost[unitId])){
+        else if ((unitId == 8) && (this[player + "Gold"] >= this.unitCost[unitId]) && (this[player + "Income"] > 15)){
             this[player + "Gold"] -= this.unitCost[unitId];
             this[player + "Income"] += this.unitIncomeChange[unitId];
 
-            this[unitArr].push(new Creature(unitType, 60, 10, this.unitSpeed[unitId], "rgb(200, 0, 0)"));
+            this[unitArr].push(new Creature(unitType, 60, 10, this.unitSpeed[unitId], this.unitColor[unitId]));
         }
-        else if ((unitId == 9) && (this[player + "Gold"] >= this.unitCost[unitId])){
+        else if ((unitId == 9) && (this[player + "Gold"] >= this.unitCost[unitId]) && (this[player + "Income"] > 50)){
             this[player + "Gold"] -= this.unitCost[unitId];
             this[player + "Income"] += this.unitIncomeChange[unitId];
 
-            this[unitArr].push(new Creature(unitType, 105, 10, this.unitSpeed[unitId], "rgb(200, 0, 0)"));
+            this[unitArr].push(new Creature(unitType, 105, 10, this.unitSpeed[unitId], this.unitColor[unitId]));
         }
     }
 
@@ -160,6 +161,10 @@ class Game{
         }
     }
 
+    /*
+    Buggen SKJER hvis begge hopper frem og treffer hverandre, ikke hvis bare en hopper hen til den andre. Aka hvis det er oddetall så blir det riktig, partall blir det bug.
+    */
+
     move(){
         let friendReachedEnd = false;
         this.friends.forEach((friend) => {
@@ -186,10 +191,6 @@ class Game{
                     friend.myCell++;
 
                     this.cells[friend.myCell] = friend;
-                }
-
-                if (this.#shouldFight(friend)){
-                    this.unitsThatWillAttack.push({attacker: friend, target: this.cells[friend.myCell + 1]});
                 }
             }
         })
@@ -224,16 +225,28 @@ class Game{
 
                     this.cells[enemy.myCell] = enemy;
                 } 
-
-                if (this.#shouldFight(enemy)){
-                    this.unitsThatWillAttack.push({attacker: enemy, target: this.cells[enemy.myCell - 1]});
-                }
             }
         })
 
         if (enemyReachedEnd){
             this.enemies.splice(0, 1);
         }
+
+        this.friends.forEach((friend) => {
+            if (this[friend.speedType + "TimerReached"]){
+                if (this.#shouldFight(friend)){
+                    this.unitsThatWillAttack.push({attacker: friend, target: this.cells[friend.myCell + 1]});
+                }
+            }
+        })
+
+        this.enemies.forEach((enemy) => {
+            if (this[enemy.speedType + "TimerReached"]){
+                if (this.#shouldFight(enemy)){
+                    this.unitsThatWillAttack.push({attacker: enemy, target: this.cells[enemy.myCell - 1]});
+                }
+            }
+        })
     }
 
     #shouldFight(unit){
