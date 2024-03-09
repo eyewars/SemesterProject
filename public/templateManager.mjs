@@ -67,27 +67,65 @@ export function createUI(template){
 
         registerForm.addEventListener("submit", async (event) => {
             event.preventDefault();
-        
+            
             const formData = new URLSearchParams(new FormData(registerForm));
-        
+            const username = formData.get("username");
+            const email = formData.get("email");
+            const password = formData.get("password");
+
+            if (!(username.length >= 1) || !(username.length <= 12)){
+                alert("Username needs to be between 1 and 12 characters");
+                return;
+            }
+
+            if (!(email.includes("@")) || ((email.includes(" ")))){
+                alert("Invalid E-Mail address");
+                return;
+            }
+
+            if (!(password.length >= 6)){
+                alert("Password needs to be at least 6 characters");
+                return;
+            }
+
+            let exists;
+
             const requestOptions = {
                 method: "POST",
                 body: formData
             }
         
             try {
-                let response = await fetch("/user", requestOptions);
+                let response = await fetch("/user/check", requestOptions);
         
                 if (response.status != 200) {
                     throw new Error("Error: " + response.status);
                 }
         
                 let data = await response.json();
-                console.log(data);
-                createUI(indexTemplate);
+                exists = data.exists;
+                createUser();
             } catch (error) {
                 console.error(error);
             }
+
+            async function createUser(){
+                if (!exists){
+                    try {
+                        let response = await fetch("/user", requestOptions);
+                
+                        if (response.status != 200) {
+                            throw new Error("Error: " + response.status);
+                        }
+                
+                        let data = await response.json();
+                        console.log(data);
+                        createUI(indexTemplate);
+                    } catch (error) {
+                        console.error(error);
+                    }
+                }  
+            }     
         })
 
         registerBackButton.addEventListener("click", (event) => {

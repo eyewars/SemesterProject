@@ -7,3 +7,7 @@ button{
     height: 50px;
     font-size: 20px;
 }
+
+#deleteButton{
+    background-color: red;
+}

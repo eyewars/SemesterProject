@@ -169,6 +169,30 @@ class DBManager {
 
         return id;
     }
+
+    async checkIfUserExists(username, email){
+        const client = new pg.Client(this.#credentials);
+
+        let users;
+
+        try {
+            await client.connect();
+            const output = await client.query('SELECT EXISTS(SELECT * FROM "public"."Users" WHERE username = $1 OR email = $2);', [username, email]);
+
+            // Client.Query returns an object of type pg.Result (https://node-postgres.com/apis/result)
+            // Of special intrest is the rows and rowCount properties of this object.
+
+            users = output.rows;
+
+        }catch(error) {
+            console.error(error);
+            //TODO : Error handling?? Remember that this is a module seperate from your server 
+        }finally {
+            client.end(); // Always disconnect from the database.
+        }
+
+        return users;
+    }
 }
 
 export default new DBManager(process.env.DB_CONNECTIONSTRING);

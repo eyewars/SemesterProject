@@ -44,6 +44,14 @@ USER_API.get("/", authenticateToken, async (req, res) => {
 	res.send(userInfo);
 })
 
+USER_API.post("/check", async (req, res) => {
+	const {username, email} = req.body;
+
+	const exists = await DBManager.checkIfUserExists(username, email);
+
+	res.json({exists: exists[0].exists}).end();
+})
+
 USER_API.post("/", createHashedPassword, async (req, res) => {
 	// create user
 	// This is using javascript object destructuring.
