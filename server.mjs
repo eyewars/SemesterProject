@@ -43,6 +43,12 @@ TODO:
 3. Gjør sånn at email og username må være unike (tror ikke det er sånn lenger etter jeg kobla opp mot database)
 4. Gjør sånn at når man trykker på start game kommer man til en ny skjerm, der må det være en knapp for å trekke seg ut hvis man ikke vil spille alikavel (så går man tilbake til den forrige plassen). Du burde også bli hevet ut av queuen hvis det var så og så lenge siden du trykka play. 
 5. Gjør sånn at når spillet finner en match så må begge spillere trykke accept (man har si 15 sek på seg), hvis ikke så blir spillet aborta
+6. Add basic offline greier (han hadde en repo om det på github)
+9. Kanskje lag flere mapper for å sortere litt
+10. Legg til .status() alle plassene det ikke er
+11. Endre på error systemet, gjør sånn at den logger en melding og ikke bare status kode (du trenger bare å endre i fetchHandler.mjs), husk da å faktisk sende en error melding alltid
+12. Lag en emithandler for clienten akkurat som localstorage handler (kanskje gjør det for serveren også)
+
 
 
 

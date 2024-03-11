@@ -1,4 +1,6 @@
 "use strict";
+import { sendRequest } from "./fetchHandler.mjs";
+import { getToken } from "./localStorageHandler.mjs";
 
 export let player = "";
 export let playerId;
@@ -6,29 +8,14 @@ export let playerName;
 export let enemyName;
 
 export async function getPlayer(){
-    const token = localStorage.getItem("token");
+    const token = getToken();
 
-    const requestOptions = {
-        method: "GET",
-        headers: {
-            authorization: token,
-        }
-    }
+    const data = await sendRequest("/game/getPlayer", "GET", undefined, token);
 
-    try {
-        let response = await fetch("/game/getPlayer", requestOptions);
-
-        if (response.status != 200) {
-            throw new Error("Error: " + response.status);
-        }
-
-        let data = await response.json();
-
+    if (data != undefined){
         player = data.player;
         playerId = data.id;
         playerName = data.myName;
         enemyName = data.enemyName;
-    } catch (error) {
-        console.error(error);
     }
 }

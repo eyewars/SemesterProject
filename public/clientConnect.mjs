@@ -19,12 +19,11 @@ socket.on("connect", () => {
     console.log("Client connected: " + socket.id);
 });
 
-socket.on("loadGame", (data) => {
-    createUI(gameTemplate);
+socket.on("loadGame", async (data) => {
     game = data;
-    getPlayer();
+    await getPlayer();
+    createUI(gameTemplate);
     requestAnimationFrame(drawGame);
-    console.log("Nå loada jeg!");
 })
 
 socket.on("updateGame", (data) => {
@@ -34,6 +33,5 @@ socket.on("updateGame", (data) => {
 
 socket.on("leaveRoom", (room) => {
     socket.emit("leaveRoom", room);
-    console.log("Nå leavea jeg!");
     createUI(startTemplate);
 })

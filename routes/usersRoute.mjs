@@ -23,16 +23,15 @@ USER_API.post("/login", createHashedPassword, async (req, res) => {
 		res.status(HTTPCodes.SuccesfullResponse.Ok).json({message: "Successful login", token: token}).end();
 	}
 	else{
-		//Den meldingen som blir sendt (med send.()) blir ikke sett noen plass, finn ut av det
-		res.status(HTTPCodes.ClientSideErrorResponse.BadRequest).send("Wrong username or password").end();
+		res.status(HTTPCodes.ClientSideErrorResponse.BadRequest).end();
 	}
 })
 
 USER_API.get("/isLoggedIn", authenticateToken, async (req, res) => {
-	//Hvis du allerede har en valid token når du åpner/refresher nettsiden, så vil du få en ny en. Dette er sånn at ikke tokenen din kan tilfeldigvis expiree mens du holder på med noe.
+	//Hvis du allerede har en valid token når du åpner/refresher nettsiden, så vil du få en ny en. Dette er sånn at ikke tokenen din kan tilfeldigvis går ut mens du holder på med noe.
 	const newToken = createToken(req.token.userId);
 
-	res.status(200).json({token: newToken}).end();
+	res.status(HTTPCodes.SuccesfullResponse.Ok).json({token: newToken}).end();
 })
 
 USER_API.get("/", authenticateToken, async (req, res) => {
@@ -131,15 +130,6 @@ USER_API.delete("/", authenticateToken, async (req, res) => {
 	else {
 		res.json({ message: 'User was not deleted'}).end();
 	}
-
-	/*
-
-	if (req.params.id >= users.length) {
-		res.json({ message: 'ID not valid' }).end();
-		return;
-	}
-	users.splice(req.params.id, 1);
-*/
 })
 
 export default USER_API;

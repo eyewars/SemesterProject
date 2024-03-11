@@ -1,6 +1,8 @@
 "use strict";
 import { setCanvas } from "./draw.mjs";
 import { socket } from "./clientConnect.mjs";
+import { setToken, getToken, removeToken } from "./localStorageHandler.mjs";
+import { sendRequest } from "./fetchHandler.mjs";
 
 export const container = document.getElementById("container");
 
@@ -10,6 +12,13 @@ export const startTemplate = document.getElementById("startTemplate");
 const loginTemplate = document.getElementById("loginTemplate");
 const registerTemplate = document.getElementById("registerTemplate");
 const settingsTemplate = document.getElementById("settingsTemplate");
+
+const usernameAlert = "Username needs to be between 1 and 12 characters";
+const emailAlert = "Invalid E-Mail address";
+const passwordAlert = "Password needs to be at least 6 characters";
+const loginAlert = "Incorrect email and/or password";
+const alreadyExistsAlert = "Username and/or E-Mail already exists";
+const deleteConfirm = "Are you sure you want to delete your account?";
 
 export function createUI(template){
     container.innerHTML = "";
@@ -31,30 +40,14 @@ export function createUI(template){
         const startGameButton = container.querySelector("#startGameButton");
         const settingsButton = container.querySelector("#settingsButton");
 
-        const token = localStorage.getItem("token");
+        const token = getToken();
 
+        
         startGameButton.addEventListener("click", async () => {
-            const requestOptions = {
-                method: "POST",
-                headers: {
-                    authorization: token,
-                }
-            }
-        
-            try {
-                let response = await fetch("/game", requestOptions);
-        
-                if (response.status != 200) {
-                    console.log("FEIL I START GAME");
-                    throw new Error("Error: " + response.status);
-                }
-        
-                let data = await response.json();
-                console.log(data.message);
-        
+            const data = await sendRequest("/game", "POST", undefined, token);
+
+            if (data.id != undefined){
                 socket.emit("loadGame", data.id);
-            } catch (error) {
-                console.error(error);
             }
         })
 
@@ -69,63 +62,34 @@ export function createUI(template){
             event.preventDefault();
             
             const formData = new URLSearchParams(new FormData(registerForm));
+
             const username = formData.get("username");
             const email = formData.get("email");
             const password = formData.get("password");
 
             if (!(username.length >= 1) || !(username.length <= 12)){
-                alert("Username needs to be between 1 and 12 characters");
+                alert(usernameAlert);
                 return;
             }
 
             if (!(email.includes("@")) || ((email.includes(" ")))){
-                alert("Invalid E-Mail address");
+                alert(emailAlert);
                 return;
             }
 
             if (!(password.length >= 6)){
-                alert("Password needs to be at least 6 characters");
+                alert(passwordAlert);
                 return;
             }
 
-            let exists;
+            const data = await sendRequest("/user/check", "POST", formData);
 
-            const requestOptions = {
-                method: "POST",
-                body: formData
+            if (!data.exists){
+                await sendRequest("/user", "POST", formData, undefined, [createUI.bind(null, indexTemplate)]);
             }
-        
-            try {
-                let response = await fetch("/user/check", requestOptions);
-        
-                if (response.status != 200) {
-                    throw new Error("Error: " + response.status);
-                }
-        
-                let data = await response.json();
-                exists = data.exists;
-                createUser();
-            } catch (error) {
-                console.error(error);
-            }
-
-            async function createUser(){
-                if (!exists){
-                    try {
-                        let response = await fetch("/user", requestOptions);
-                
-                        if (response.status != 200) {
-                            throw new Error("Error: " + response.status);
-                        }
-                
-                        let data = await response.json();
-                        console.log(data);
-                        createUI(indexTemplate);
-                    } catch (error) {
-                        console.error(error);
-                    }
-                }  
-            }     
+            else{
+                alert(alreadyExistsAlert);
+            }  
         })
 
         registerBackButton.addEventListener("click", (event) => {
@@ -139,26 +103,10 @@ export function createUI(template){
             event.preventDefault();
         
             const formData = new URLSearchParams(new FormData(loginForm));
-        
-            const requestOptions = {
-                method: "POST",
-                body: formData
-            }
-        
-            try {
-                let response = await fetch("/user/login", requestOptions);
-        
-                if (response.status != 200) {
-                    throw new Error("Error: " + response.status);
-                }
-        
-                let data = await response.json();
-                console.log(data.message);
-                localStorage.setItem("token", data.token);
-                createUI(startTemplate);
-            } catch (error) {
-                console.error(error);
-            }
+
+            const data = await sendRequest("/user/login", "POST", formData, undefined, [createUI.bind(null, startTemplate)], [alert.bind(null, loginAlert)]);
+
+            setToken(data.token);
         })
 
         loginBackButton.addEventListener("click", (event) => {
@@ -174,31 +122,15 @@ export function createUI(template){
         const myUsername = container.querySelector("#myUsername");
         const myEmail = container.querySelector("#myEmail");
 
-        const token = localStorage.getItem("token");
+        const token = getToken();
 
         async function getUserInfo(){
-            
-            const requestOptions = {
-                method: "GET",
-                headers: {
-                    authorization: token,
-                }
-            }
+            const data = await sendRequest("/user", "GET", undefined, token);
 
-            try {
-                let response = await fetch("/user", requestOptions);
-        
-                if (response.status != 200) {
-                    throw new Error("Error: " + response.status);
-                }
-        
-                let data = await response.json();
-                
+            if (data != undefined){
                 myId.innerText = "Id: " + data.id;
                 myUsername.innerText = "Username: " + data.username;
                 myEmail.innerText = "Email: " + data.email;
-            } catch (error) {
-                console.log(error);
             }
         }
         getUserInfo();
@@ -207,32 +139,44 @@ export function createUI(template){
             event.preventDefault();
         
             const formData = new URLSearchParams(new FormData(updateForm));
-        
-            const requestOptions = {
-                method: "PUT",
-                body: formData,
-                headers: {
-                    authorization: token,
+
+            const username = formData.get("username");
+            const email = formData.get("email");
+            const password = formData.get("password");
+
+            if (!(username.length >= 1) || !(username.length <= 12)){
+                if (username != ""){
+                    alert(usernameAlert);
+                    return;   
+                }  
+            }
+
+            if (!(email.includes("@")) || ((email.includes(" ")))){
+                if (email != ""){
+                    alert(emailAlert);
+                    return;
                 }
             }
-        
-            try {
-                let response = await fetch("/user", requestOptions);
-        
-                if (response.status != 200) {
-                    throw new Error("Error: " + response.status);
+
+            if (!(password.length >= 6)){
+                if (password != ""){
+                    alert(passwordAlert);
+                    return;    
                 }
-        
-                let data = await response.json();
-                console.log(data);
-                createUI(settingsTemplate);
-            } catch (error) {
-                console.error(error);
             }
+
+            const data = await sendRequest("/user/check", "POST", formData);
+
+            if (!data.exists){
+                await sendRequest("/user", "PUT", formData, token, [createUI.bind(null, settingsTemplate)]);
+            }
+            else{
+                alert(alreadyExistsAlert);
+            }   
         })
 
         logoutButton.addEventListener("click", (event) => {
-            localStorage.removeItem("token");
+            removeToken();
 
             createUI(indexTemplate);
         })
@@ -240,29 +184,8 @@ export function createUI(template){
         deleteButton.addEventListener("click", async (event) => {
             event.preventDefault();
 
-            if (confirm("Are you sure?")){
-                const requestOptions = {
-                    method: "DELETE",
-                    headers: {
-                        authorization: token,
-                    }
-                }
-            
-                try {
-                    let response = await fetch("/user", requestOptions);
-            
-                    if (response.status != 200) {
-                        throw new Error("Error: " + response.status);
-                    }
-            
-                    let data = await response.json();
-                    console.log(data);
-
-                    localStorage.removeItem("token");
-                    createUI(indexTemplate);
-                } catch (error) {
-                    console.error(error);
-                }
+            if (confirm(deleteConfirm)){
+                await sendRequest("/user", "DELETE", undefined, token, [createUI.bind(null, indexTemplate), removeToken]);
             }
         })
 
@@ -273,31 +196,10 @@ export function createUI(template){
 }
 
 async function loadInitialPage(){
-    const token = localStorage.getItem("token");
+    const token = getToken();
 
-    const requestOptions = {
-        method: "GET",
-        headers: {
-            authorization: token,
-        }
-    }
+    const data = await sendRequest("/user/isLoggedIn", "GET", undefined, token, [createUI.bind(null, startTemplate)], [createUI.bind(null, indexTemplate)]);
 
-    try {
-        let response = await fetch("/user/isLoggedIn", requestOptions);
-
-        if (response.status != 200) {
-            createUI(indexTemplate);
-        }
-        else{
-            let data = await response.json();
-
-            localStorage.setItem("token", data.token);
-
-            createUI(startTemplate);
-        }
-
-    } catch (error) {
-        console.error(error);
-    }
+    setToken(data.token);
 }
 loadInitialPage();
