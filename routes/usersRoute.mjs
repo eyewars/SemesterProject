@@ -23,7 +23,7 @@ USER_API.post("/login", createHashedPassword, async (req, res) => {
 		res.status(HTTPCodes.SuccesfullResponse.Ok).json({message: "Successful login", token: token}).end();
 	}
 	else{
-		res.status(HTTPCodes.ClientSideErrorResponse.BadRequest).end();
+		res.status(HTTPCodes.ClientSideErrorResponse.BadRequest).json({message: "Incorrect login information"}).end();
 	}
 })
 
@@ -37,10 +37,9 @@ USER_API.get("/isLoggedIn", authenticateToken, async (req, res) => {
 USER_API.get("/", authenticateToken, async (req, res) => {
 	// Tip: All the information you need to get the id part of the request can be found in the documentation 
 	// https://expressjs.com/en/guide/routing.html (Route parameters)
-
 	const userInfo = await DBManager.getUser(req.token.userId);
 
-	res.send(userInfo);
+	res.status(HTTPCodes.SuccesfullResponse.Ok).send(userInfo).end();
 })
 
 USER_API.post("/check", async (req, res) => {
@@ -48,50 +47,20 @@ USER_API.post("/check", async (req, res) => {
 
 	const exists = await DBManager.checkIfUserExists(username, email);
 
-	res.json({exists: exists[0].exists}).end();
+	res.status(HTTPCodes.SuccesfullResponse.Ok).json({exists: exists[0].exists}).end();
 })
 
 USER_API.post("/", createHashedPassword, async (req, res) => {
-	// create user
-	// This is using javascript object destructuring.
-	// Recomend reading up https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment#syntax
-	// https://www.freecodecamp.org/news/javascript-object-destructuring-spread-operator-rest-parameter/
-
-	// Basically sånn det fungerer er at den lager 3 variabler. name, email, og password. Verdiene blir satt til de samsvarende verdiene i req.body objektet med samme navn
 	const { username, email, password } = req.body;
 	console.log(req.body);
 
 	if (username != "" && email != "" && password != "") {
-		
 		let user = new User(username, email, password);
-		//TODO: Do not save passwords!!!
 
-		//TODO: Does the user exist?
-		let exists = false;
-		/*
-		for (let i = 0; i < users.length; i++){
-			if (email == users[i].email){
-				exists = true;
-				break;
-			}
-			if (username == users[i].username){
-				exists = true; 
-				break;
-			}
-		}
-		*/
-
-		if (!exists) {
-			//users.push(user);
-
-			user = await user.save();
-			res.status(HTTPCodes.SuccesfullResponse.Ok).json(JSON.stringify(user)).end();
-			//res.json({ message: 'User registered successfully' }).end();
-		} else {
-			res.status(HTTPCodes.ClientSideErrorResponse.BadRequest).end();
-		}
+		user = await user.save();
+		res.status(HTTPCodes.SuccesfullResponse.Ok).send(user).end();
 	} else {
-		res.status(HTTPCodes.ClientSideErrorResponse.BadRequest).send("Mangler data felt").end();
+		res.status(HTTPCodes.ClientSideErrorResponse.BadRequest).json({message: "Missing data field"}).end();
 	}
 })
 
@@ -125,10 +94,10 @@ USER_API.delete("/", authenticateToken, async (req, res) => {
 	const deletion = await DBManager.deleteUser(req.token.userId);
 
 	if (deletion){
-		res.json({ message: 'User deleted successfully'}).end();
+		res.status(HTTPCodes.SuccesfullResponse.Ok).json({ message: 'User deleted successfully'}).end();
 	}
 	else {
-		res.json({ message: 'User was not deleted'}).end();
+		res.status(HTTPCodes.ServerErrorRespons.InternalError).json({ message: 'User was not deleted'}).end();
 	}
 })
 

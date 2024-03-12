@@ -4,6 +4,7 @@ import Game from "../modules/game.mjs";
 import GameManager from "../modules/gameManager.mjs";
 import { authenticateToken } from "../modules/bearerToken.mjs";
 import DBManager from "../modules/storageManager.mjs"
+import HTTPCodes from "../modules/httpCodes.mjs";
 
 const GAME_API = express.Router();
 
@@ -28,7 +29,7 @@ GAME_API.get("/getPlayer", authenticateToken, async(req, res) => {
     const friend = await DBManager.getUser(myGame.player1Id);
     const enemy = await DBManager.getUser(myGame.player2Id);
 
-    res.json({player: mySide, id: req.token.userId, myName: friend.username, enemyName: enemy.username}).end();
+    res.status(HTTPCodes.SuccesfullResponse.Ok).json({player: mySide, id: req.token.userId, myName: friend.username, enemyName: enemy.username}).end();
 
 })
 
@@ -42,10 +43,10 @@ GAME_API.post("/", authenticateToken, gameManager.createNewGame, (req, res) => {
         ongoingGamesLookup[games.length - 1] = games.length - 1;
         console.log(ongoingGamesLookup);
 
-        res.json({message: "New Game Created!", id: req.token.userId}).end;
+        res.status(HTTPCodes.SuccesfullResponse.Ok).json({message: "New Game Created!", id: req.token.userId}).end;
     }
     else {
-        res.json({message: "Need one more player!", id: req.token.userId}).end;
+        res.status(HTTPCodes.SuccesfullResponse.Ok).json({message: "Need one more player!", id: req.token.userId}).end;
     }
 })
 

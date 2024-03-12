@@ -8,6 +8,9 @@ class User{
 		this.email = email;
 		this.passwordHash = passwordHash;
 		this.id;
+		this.games = 0;
+		this.wins = 0;
+		this.losses = 0;
 	}
 
 	async save() {

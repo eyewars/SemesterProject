@@ -18,13 +18,13 @@ export async function sendRequest(url, method, body, token, successFunctions = [
     }
 
     try {
-        let response = await fetch(url, requestOptions);
+        const response = await fetch(url, requestOptions);
+
+        const data = await response.json();
 
         if (response.status != 200) {
-            throw new Error("Error: " + response.status);
+            throw new Error("Error " + response.status + ": " + data.message);
         }
-
-        let data = await response.json();
 
         successFunctions.forEach(func => {
             func();

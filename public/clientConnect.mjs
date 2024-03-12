@@ -3,6 +3,7 @@ import { io } from "https://cdn.socket.io/4.7.4/socket.io.esm.min.js";
 import { drawGame } from "./draw.mjs";
 import { createUI, gameTemplate, startTemplate } from "./templateManager.mjs";
 import { getPlayer } from "./getInfo.mjs";
+import { emitLeaveRoom } from "./socketEmitHandler.mjs";
 
 export let socket;
 
@@ -32,6 +33,6 @@ socket.on("updateGame", (data) => {
 })
 
 socket.on("leaveRoom", (room) => {
-    socket.emit("leaveRoom", room);
+    emitLeaveRoom(room);
     createUI(startTemplate);
 })

@@ -1,6 +1,7 @@
 "use strict";
 import { emitUpdate, leaveRoom } from "./socket.mjs";
 import { games, gameLookup, ongoingGamesLookup } from "../routes/gameRoute.mjs";
+import DBManager from "./storageManager.mjs"
 
 // Kanskje send disse verdiene ned til klienten og sett canvas størrelsen til det den får, så vil disse variablene bestemme det alltid istedenfor at du må oppdatere hvis du endrer
 export const canvasWidth = 1600;
@@ -13,7 +14,7 @@ function update(){
     const diff = (Date.now() - lastUpdate) / 1000;
     lastUpdate = Date.now();
 
-    Object.keys(ongoingGamesLookup).forEach((key) => {
+    Object.keys(ongoingGamesLookup).forEach(async (key) => {
         games[key].timerManager(diff);
         games[key].move();
         games[key].fight();
@@ -27,6 +28,8 @@ function update(){
 
             leaveRoom("game" + key);
 
+            updateGames(key, winner);
+
             console.log(ongoingGamesLookup);
 
             delete gameLookup[games[key].player1Id];
@@ -39,3 +42,23 @@ function update(){
 }
 
 setInterval(update, 10);
+
+async function updateGames(gameId, winner){
+    const player1 = await DBManager.getUser(games[gameId].player1Id);
+    const player2 = await DBManager.getUser(games[gameId].player2Id);
+
+    player1.games++;
+    player2.games++;
+
+    if (winner == "friend"){
+        player1.wins++;
+        player2.losses++;
+    }
+    else{
+        player1.losses++;
+        player2.wins++;
+    }
+
+    await DBManager.updateGames(player1);
+    await DBManager.updateGames(player2);
+}

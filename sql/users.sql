@@ -8,6 +8,9 @@ CREATE TABLE IF NOT EXISTS public."Users"
     email text COLLATE pg_catalog."default",
     username text COLLATE pg_catalog."default",
     password text COLLATE pg_catalog."default",
+    games integer,
+    wins integer,
+    losses integer,
     CONSTRAINT "Users_pkey" PRIMARY KEY (id)
 )
 

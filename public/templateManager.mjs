@@ -1,8 +1,8 @@
 "use strict";
 import { setCanvas } from "./draw.mjs";
-import { socket } from "./clientConnect.mjs";
 import { setToken, getToken, removeToken } from "./localStorageHandler.mjs";
 import { sendRequest } from "./fetchHandler.mjs";
+import { emitLoadGame } from "./socketEmitHandler.mjs";
 
 export const container = document.getElementById("container");
 
@@ -47,7 +47,7 @@ export function createUI(template){
             const data = await sendRequest("/game", "POST", undefined, token);
 
             if (data.id != undefined){
-                socket.emit("loadGame", data.id);
+                emitLoadGame(data.id);
             }
         })
 
@@ -121,6 +121,10 @@ export function createUI(template){
         const myId = container.querySelector("#myId");
         const myUsername = container.querySelector("#myUsername");
         const myEmail = container.querySelector("#myEmail");
+        const myGames = container.querySelector("#myGames");
+        const myWinrate = container.querySelector("#myWinrate");
+        const myWins = container.querySelector("#myWins");
+        const myLosses = container.querySelector("#myLosses");
 
         const token = getToken();
 
@@ -131,6 +135,15 @@ export function createUI(template){
                 myId.innerText = "Id: " + data.id;
                 myUsername.innerText = "Username: " + data.username;
                 myEmail.innerText = "Email: " + data.email;
+                myGames.innerText = "Games: " + data.games;
+                if (data.games == 0){
+                    myWinrate.innerText = "Winrate: No games played";
+                }else{
+                    myWinrate.innerText = "Winrate: " + ((data.wins / data.games) * 100).toFixed(1) + "%";
+                }
+                
+                myWins.innerText = "Wins: " + data.wins;
+                myLosses.innerText = "Losses: " + data.losses;
             }
         }
         getUserInfo();

@@ -38,8 +38,6 @@ class DBManager {
         }finally {
             client.end(); // Always disconnect from the database.
         }
-
-        //return user;
     }
 
     async deleteUser(id) {
@@ -78,7 +76,7 @@ class DBManager {
 
         try {
             await client.connect();
-            const output = await client.query('INSERT INTO "public"."Users"("username", "email", "password") VALUES($1::Text, $2::Text, $3::Text) RETURNING id;', [user.username, user.email, user.passwordHash]);
+            const output = await client.query('INSERT INTO "public"."Users"("username", "email", "password", "games", "wins", "losses") VALUES($1::Text, $2::Text, $3::Text, $4::Integer, $5::Integer, $6::Integer) RETURNING id;', [user.username, user.email, user.passwordHash, user.games, user.wins, user.losses]);
 
             // Client.Query returns an object of type pg.Result (https://node-postgres.com/apis/result)
             // Of special intrest is the rows and rowCount properties of this object.
@@ -192,6 +190,27 @@ class DBManager {
         }
 
         return users;
+    }
+
+    async updateGames(user) {
+
+        const client = new pg.Client(this.#credentials);
+
+        try {
+            await client.connect();
+            const output = await client.query('UPDATE "public"."Users" SET games = $1, wins = $2, losses = $3 WHERE id = $4;', [user.games, user.wins, user.losses, user.id]);
+
+            // Client.Query returns an object of type pg.Result (https://node-postgres.com/apis/result)
+            // Of special intrest is the rows and rowCount properties of this object.
+
+            //TODO Did we update the user?
+
+        }catch(error) {
+            console.error(error);
+            //TODO : Error handling?? Remember that this is a module seperate from your server 
+        }finally {
+            client.end(); // Always disconnect from the database.
+        }
     }
 }
 

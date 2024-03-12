@@ -1,7 +1,7 @@
 "use strict";
 import { game } from "./clientConnect.mjs";
 import { player, playerId, playerName, enemyName } from "./getInfo.mjs";
-import { socket } from "./clientConnect.mjs";
+import { emitSummon } from "./socketEmitHandler.mjs";
 
 let lastUpdate = Date.now();
 
@@ -30,6 +30,8 @@ export function setCanvas(cvs){
 export function drawGame(){
     //CTX ER UNDEFINED I SÅNN EN FRAME, JEG TROR DRAWGAME SKJER FØR SETCANVAS
     ctx.clearRect(0, 0, 1600, 600);
+
+    ctx.lineWidth = 2;
 
     for (let i = 0; i < game.friends.length; i++){
         ctx.fillStyle = game.friends[i].color;
@@ -128,7 +130,7 @@ for (let i = 0; i < 10; i++){
         maxTimer: buttonMaxTimer[i],
         summonUnit(){
             if (this.timer == 0){
-                socket.emit("summon", {playerId: playerId, unitId: i});
+                emitSummon({playerId: playerId, unitId: i});
                 this.timer = this.maxTimer;
             }
         }
