@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Prosjekt</title>
+		<title>Cube Wars</title>
 		<link href="style.css" rel="stylesheet" type="text/css" />
 	</head>
 
@@ -19,14 +19,12 @@
 		<template id="startTemplate">
 			<button id="startGameButton">Start Game</button>
 			<br>
-			<br>
 			<button id="settingsButton">Settings</button>
 		</template>
 		
 		<template id="indexTemplate">
 			<h1 id="testMessage">Cube Wars</h1>
 			<button id="loginButton">Login</button>
-			<br>
 			<br>
 			<button id="registerButton">Register</button>
 		</template>
@@ -43,7 +41,6 @@
 				<br>
 				<button type="submit">Login</button>
 			</form>
-			<br>
 			<button id="loginBackButton">Back</button>
 		</template>
 
@@ -63,7 +60,6 @@
 				<br>
 				<button type="submit">Create User</button>
 			</form>
-			<br>
 			<button id="registerBackButton">Back</button>
 		</template>
 
@@ -75,9 +71,7 @@
 			<p id="myWinrate">Winrate</p>
 			<p id="myWins">Wins</p>
 			<p id="myLosses">Losses</p>
-			<br>
 			<button id="settingsBackButton">Back</button>
-			<br>
 			<p>Update User</p>
 			<form id="updateForm">
 				<label>Username:
@@ -94,16 +88,25 @@
 				<br>
 				<button type="submit">Update User</button>
 			</form>
-			<br>
 			<button id="logoutButton">Log out</button>
-			<br>
 			<br>
 			<button id="deleteButton">Delete User</button>
 		</template>
+
+		<template id="gameOverTemplate">
+			<h2 id="gameOverText"></h2>
+			<button id="gameOverMenuButton">Menu</button>
+		</template>
+
+		<template id="queueTemplate">
+			<h2 id="queueText">Waiting for another player...</h2>
+			<button id="queueBackButton">Back</button>
+		</template>
 		
 	</body>
-	<script src="templateManager.mjs" type="module"></script>
-	<script src="loginForms.mjs" type="module"></script>
-	<script src="draw.mjs" type="module"></script>
-	<script src="clientConnect.mjs" type="module"></script>
+	
+	<script src="js/templateManager.mjs" type="module"></script>
+	<script src="js/loginForms.mjs" type="module"></script>
+	<script src="js/draw.mjs" type="module"></script>
+	<script src="js/clientConnect.mjs" type="module"></script>
 </html>

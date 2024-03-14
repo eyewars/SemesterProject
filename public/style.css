@@ -11,3 +11,7 @@ button{
 #deleteButton{
     background-color: red;
 }
+
+button{
+    margin-bottom: 20px;
+}

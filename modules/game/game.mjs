@@ -15,7 +15,7 @@ class Game{
         this.player2Income = 10;
 
         this.unitCost = [15, 20, 20, 50, 50, 30, 150, 200, 500, 1000];
-        this.unitIncomeChange = [1, 1.3, 0.8, 0.2, 7.5, 0.1, 5, 0, -15, -50];
+        this.unitIncomeChange = [1, 1.3, 0.8, 0.2, 8, 0.1, 5, 0, -15, -50];
         this.unitSpeed = ["slow", "medium", "fast", "medium", "slow", "fast", "medium", "slow", "medium", "fast"];
         this.unitColor = ["#23b7e1", "#00c8bc", "#00d88d", "#63e64d", "#aceb35", "#e4d924", "#efbe25", "#f1842f", "#ec6032", "#e42233"];
 
@@ -304,10 +304,10 @@ class Game{
 
     gameHasEnded(){
         if (this.friendCastle.health <= 0){
-            return "enemy";
+            return "player2";
         }
         else if (this.enemyCastle.health <= 0){
-            return "friend";
+            return "player1";
         }
         return false;
     }

@@ -3,8 +3,8 @@ import express from "express";
 import User from "../modules/user.mjs";
 import HTTPCodes from "../modules/httpCodes.mjs";
 import DBManager from "../modules/storageManager.mjs"
-import { createHashedPassword } from "../modules/passwordHash.mjs";
-import { createToken, authenticateToken } from "../modules/bearerToken.mjs";
+import { createHashedPassword } from "../modules/security/passwordHash.mjs";
+import { createToken, authenticateToken } from "../modules/security/bearerToken.mjs";
 
 const USER_API = express.Router();
 
@@ -52,16 +52,34 @@ USER_API.post("/check", async (req, res) => {
 
 USER_API.post("/", createHashedPassword, async (req, res) => {
 	const { username, email, password } = req.body;
+
 	console.log(req.body);
 
-	if (username != "" && email != "" && password != "") {
-		let user = new User(username, email, password);
+	const exists = await DBManager.checkIfUserExists(username, email);
 
-		user = await user.save();
-		res.status(HTTPCodes.SuccesfullResponse.Ok).send(user).end();
-	} else {
-		res.status(HTTPCodes.ClientSideErrorResponse.BadRequest).json({message: "Missing data field"}).end();
+	if (!exists[0].exists){
+		if (username != "" && email != "" && password != "") {
+			if (!(username.length >= 1) || !(username.length <= 12)){
+                res.status(HTTPCodes.ClientSideErrorResponse.BadRequest).json({message: "Invalid username"}).end();
+                return;
+            }
+
+			if (!(email.includes("@")) || ((email.includes(" ")))){
+                res.status(HTTPCodes.ClientSideErrorResponse.BadRequest).json({message: "Invalid E-Mail"}).end();
+                return;
+            }
+
+			let user = new User(username, email, password);
+
+			user = await user.save();
+			res.status(HTTPCodes.SuccesfullResponse.Ok).send(user).end();
+		} else {
+			res.status(HTTPCodes.ClientSideErrorResponse.BadRequest).json({message: "Missing data field"}).end();
+		}
+	} else{
+		res.status(HTTPCodes.ClientSideErrorResponse.BadRequest).json({message: "User already exists"}).end();
 	}
+	
 })
 
 USER_API.put("/", authenticateToken, createHashedPassword, async (req, res) => {

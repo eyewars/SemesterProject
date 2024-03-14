@@ -1,6 +1,6 @@
 "use strict";
 import { game } from "./clientConnect.mjs";
-import { player, playerId, playerName, enemyName } from "./getInfo.mjs";
+import { player, playerId, friendName, enemyName } from "./getInfo.mjs";
 import { emitSummon } from "./socketEmitHandler.mjs";
 
 let lastUpdate = Date.now();
@@ -28,7 +28,6 @@ export function setCanvas(cvs){
 }
 
 export function drawGame(){
-    //CTX ER UNDEFINED I SÅNN EN FRAME, JEG TROR DRAWGAME SKJER FØR SETCANVAS
     ctx.clearRect(0, 0, 1600, 600);
 
     ctx.lineWidth = 2;
@@ -82,7 +81,7 @@ export function drawGame(){
     ctx.fillText(game.enemyCastle.health, 1540, 430);
 
     ctx.font = "20px Arial";
-    ctx.fillText(playerName, 60, 380);
+    ctx.fillText(friendName, 60, 380);
     ctx.fillText(enemyName, 1540, 380);
 
     ctx.strokeStyle = "black";
@@ -119,7 +118,7 @@ function getMousePosition(event){
     return mousePos;
 }
 
-const buttonMaxTimer = [500, 750, 500, 2000, 12000, 2500, 1000, 7500, 30000, 60000];
+const buttonMaxTimer = [500, 750, 500, 2000, 22000, 2500, 1000, 7500, 30000, 60000];
 for (let i = 0; i < 10; i++){
     const button = {
         width: 90,

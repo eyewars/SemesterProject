@@ -1,7 +1,7 @@
 "use strict";
-import { emitUpdate, leaveRoom } from "./socket.mjs";
-import { games, gameLookup, ongoingGamesLookup } from "../routes/gameRoute.mjs";
-import DBManager from "./storageManager.mjs"
+import { emitUpdate, leaveRoom, emitGameOver } from "../socket.mjs";
+import { games, gameLookup, ongoingGamesLookup } from "../../routes/gameRoute.mjs";
+import DBManager from "../storageManager.mjs"
 
 // Kanskje send disse verdiene ned til klienten og sett canvas størrelsen til det den får, så vil disse variablene bestemme det alltid istedenfor at du må oppdatere hvis du endrer
 export const canvasWidth = 1600;
@@ -25,6 +25,8 @@ function update(){
 
         if (winner != false){
             console.log(winner + " WON THE GAME!!!");
+
+            emitGameOver(winner, "game" + key)
 
             leaveRoom("game" + key);
 

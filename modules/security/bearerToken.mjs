@@ -1,9 +1,9 @@
 "use strict";
 import jwt from "jsonwebtoken";
-import HTTPCodes from "./httpCodes.mjs";
+import HTTPCodes from "../httpCodes.mjs";
 
 export function createToken(userId) {
-	const token = jwt.sign({ userId }, process.env.TOKEN_SECRET, { expiresIn: '12h' });
+	const token = jwt.sign({ userId }, process.env.TOKEN_SECRET, { expiresIn: '30d' });
 	return token;
 }
 

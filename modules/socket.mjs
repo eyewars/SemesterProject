@@ -42,3 +42,7 @@ export function emitUpdate(game, room){
 export function leaveRoom(room){
     io.to(room).emit("leaveRoom", room);
 }
+
+export function emitGameOver(winner, room){
+    io.to(room).emit("gameOver", winner);
+}

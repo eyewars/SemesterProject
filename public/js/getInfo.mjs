@@ -4,7 +4,7 @@ import { getToken } from "./localStorageHandler.mjs";
 
 export let player = "";
 export let playerId;
-export let playerName;
+export let friendName;
 export let enemyName;
 
 export async function getPlayer(){
@@ -15,7 +15,13 @@ export async function getPlayer(){
     if (data != undefined){
         player = data.player;
         playerId = data.id;
-        playerName = data.myName;
+        friendName = data.friendName;
         enemyName = data.enemyName;
     }
+}
+
+export let gameHasStarted = false;
+
+export function changeGameState(state){
+    gameHasStarted = state;
 }

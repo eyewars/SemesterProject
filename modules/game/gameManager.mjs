@@ -1,5 +1,6 @@
 "use strict";
-import { gameLookup } from "../routes/gameRoute.mjs";
+import { gameLookup } from "../../routes/gameRoute.mjs";
+import HTTPCodes from "../httpCodes.mjs";
 
 class GameManager{
     static instance = null;
@@ -38,6 +39,21 @@ class GameManager{
 
             next(); 
         }   
+    }
+
+    leaveQueue = (req, res, next) =>{
+        if (this.#players.length < 2){
+            const index = this.#players.indexOf(req.token.userId);
+
+            this.#players.splice(index, 1);
+
+            console.log(this.#players);
+
+            next();
+        }
+        else {
+            res.status(HTTPCodes.ServerErrorRespons.InternalError).json({message: "Could not leave, game has already started"}).end();
+        }
     }
 }
 

@@ -8,10 +8,12 @@ export const container = document.getElementById("container");
 
 const indexTemplate = document.getElementById("indexTemplate");
 export const gameTemplate = document.getElementById("gameTemplate");
-export const startTemplate = document.getElementById("startTemplate");
+const startTemplate = document.getElementById("startTemplate");
 const loginTemplate = document.getElementById("loginTemplate");
 const registerTemplate = document.getElementById("registerTemplate");
 const settingsTemplate = document.getElementById("settingsTemplate");
+const queueTemplate = document.getElementById("queueTemplate");
+export const gameOverTemplate = document.getElementById("gameOverTemplate");
 
 const usernameAlert = "Username needs to be between 1 and 12 characters";
 const emailAlert = "Invalid E-Mail address";
@@ -39,15 +41,16 @@ export function createUI(template){
     } else if (template == startTemplate){
         const startGameButton = container.querySelector("#startGameButton");
         const settingsButton = container.querySelector("#settingsButton");
-
-        const token = getToken();
-
         
         startGameButton.addEventListener("click", async () => {
+            const token = getToken();
+
             const data = await sendRequest("/game", "POST", undefined, token);
 
             if (data.id != undefined){
                 emitLoadGame(data.id);
+
+                createUI(queueTemplate);
             }
         })
 
@@ -203,6 +206,20 @@ export function createUI(template){
         })
 
         settingsBackButton.addEventListener("click", (event) => {
+            createUI(startTemplate);
+        }) 
+    } else if (template == queueTemplate){
+        const queueBackButton = container.querySelector("#queueBackButton");
+
+        queueBackButton.addEventListener("click", async () => {
+            const token = getToken();
+
+            await sendRequest("/game", "GET", undefined, token, [createUI.bind(null, startTemplate)]);
+        }) 
+    } else if (template == gameOverTemplate){
+        const gameOverMenuButton = container.querySelector("#gameOverMenuButton");
+
+        gameOverMenuButton.addEventListener("click", (event) => {
             createUI(startTemplate);
         }) 
     }

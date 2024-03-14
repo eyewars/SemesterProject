@@ -1,8 +1,8 @@
 "use strict";
 import express from "express";
-import Game from "../modules/game.mjs";
-import GameManager from "../modules/gameManager.mjs";
-import { authenticateToken } from "../modules/bearerToken.mjs";
+import Game from "../modules/game/game.mjs";
+import GameManager from "../modules/game/gameManager.mjs";
+import { authenticateToken } from "../modules/security/bearerToken.mjs";
 import DBManager from "../modules/storageManager.mjs"
 import HTTPCodes from "../modules/httpCodes.mjs";
 
@@ -29,7 +29,7 @@ GAME_API.get("/getPlayer", authenticateToken, async(req, res) => {
     const friend = await DBManager.getUser(myGame.player1Id);
     const enemy = await DBManager.getUser(myGame.player2Id);
 
-    res.status(HTTPCodes.SuccesfullResponse.Ok).json({player: mySide, id: req.token.userId, myName: friend.username, enemyName: enemy.username}).end();
+    res.status(HTTPCodes.SuccesfullResponse.Ok).json({player: mySide, id: req.token.userId, friendName: friend.username, enemyName: enemy.username}).end();
 
 })
 
@@ -43,11 +43,15 @@ GAME_API.post("/", authenticateToken, gameManager.createNewGame, (req, res) => {
         ongoingGamesLookup[games.length - 1] = games.length - 1;
         console.log(ongoingGamesLookup);
 
-        res.status(HTTPCodes.SuccesfullResponse.Ok).json({message: "New Game Created!", id: req.token.userId}).end;
+        res.status(HTTPCodes.SuccesfullResponse.Ok).json({message: "New Game Created!", id: req.token.userId}).end();
     }
     else {
-        res.status(HTTPCodes.SuccesfullResponse.Ok).json({message: "Need one more player!", id: req.token.userId}).end;
+        res.status(HTTPCodes.SuccesfullResponse.Ok).json({message: "Need one more player!", id: req.token.userId}).end();
     }
+})
+
+GAME_API.get("/", authenticateToken, gameManager.leaveQueue, (req, res) => {
+    res.status(HTTPCodes.SuccesfullResponse.Ok).json({message: "Left queue successfully"}).end();
 })
 
 export default GAME_API;
