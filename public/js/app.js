@@ -9,7 +9,6 @@ const registerServiceWorker = async () => {
                 console.log("Service worker installing");
             } else if (registration.waiting) {
                 console.log("Service worker installed");
-                //window.location.reload(); // Bad idea ???
             } else if (registration.active) {
                 console.log("Service worker active");
             }
