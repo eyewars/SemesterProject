@@ -1,11 +1,8 @@
 import pg from "pg"
 
-// We are using an enviorment variable to get the db credentials 
 if (process.env.DB_CONNECTIONSTRING == undefined) {
     throw ("You forgot the db connection string");
 }
-
-/// TODO: is the structure / design of the DBManager as good as it could be?
 
 class DBManager {
 
@@ -26,17 +23,10 @@ class DBManager {
         try {
             await client.connect();
             const output = await client.query('UPDATE "public"."Users" SET username = $1, email = $2, password = $3 WHERE id = $4;', [user.username, user.email, user.passwordHash, id]);
-
-            // Client.Query returns an object of type pg.Result (https://node-postgres.com/apis/result)
-            // Of special intrest is the rows and rowCount properties of this object.
-
-            //TODO Did we update the user?
-
         }catch(error) {
             console.error(error);
-            //TODO : Error handling?? Remember that this is a module seperate from your server 
         }finally {
-            client.end(); // Always disconnect from the database.
+            client.end();
         }
     }
 
@@ -57,16 +47,10 @@ class DBManager {
                 gotDeleted = true;
             }
 
-            // Client.Query returns an object of type pg.Result (https://node-postgres.com/apis/result)
-            // Of special intrest is the rows and rowCount properties of this object.
-
-            //TODO: Did the user get deleted?
-
         }catch(error) {
             console.error(error);
-            //TODO : Error handling?? Remember that this is a module seperate from your server 
         }finally {
-            client.end(); // Always disconnect from the database.
+            client.end();
         }
         return gotDeleted;
     }
@@ -78,20 +62,14 @@ class DBManager {
             await client.connect();
             const output = await client.query('INSERT INTO "public"."Users"("username", "email", "password", "games", "wins", "losses") VALUES($1::Text, $2::Text, $3::Text, $4::Integer, $5::Integer, $6::Integer) RETURNING id;', [user.username, user.email, user.passwordHash, user.games, user.wins, user.losses]);
 
-            // Client.Query returns an object of type pg.Result (https://node-postgres.com/apis/result)
-            // Of special intrest is the rows and rowCount properties of this object.
-
-            // Kan sikkert bare fjerne ifen, det vil alltid bare være 1 uansett
             if (output.rows.length == 1) {
-                // We stored the user in the DB.
                 user.id = output.rows[0].id;
             }
 
         }catch(error) {
             console.error(error);
-            //TODO : Error handling?? Remember that this is a module seperate from your server 
         }finally {
-            client.end(); // Always disconnect from the database.
+            client.end();
         }
 
         return user;
@@ -106,7 +84,6 @@ class DBManager {
             await client.connect();
             const output = await client.query('SELECT password FROM "public"."Users" WHERE email = $1;', [email]);
 
-            // Kan sikkert bare fjerne ifen, det vil alltid bare være 1 uansett
             if (output.rows.length == 1){
                 pass = output.rows[0].password;
             }
@@ -114,7 +91,7 @@ class DBManager {
         }catch(error){
             console.error(error);
         }finally{
-            client.end(); // Always disconnect from the database.
+            client.end();
         }
 
         return pass;
@@ -129,16 +106,12 @@ class DBManager {
             await client.connect();
             const output = await client.query('SELECT * FROM "public"."Users" WHERE id = $1;', [id]);
 
-            // Client.Query returns an object of type pg.Result (https://node-postgres.com/apis/result)
-            // Of special intrest is the rows and rowCount properties of this object.
-
             user = output.rows[0];
 
         }catch(error) {
             console.error(error);
-            //TODO : Error handling?? Remember that this is a module seperate from your server 
         }finally {
-            client.end(); // Always disconnect from the database.
+            client.end();
         }
 
         return user;
@@ -153,16 +126,12 @@ class DBManager {
             await client.connect();
             const output = await client.query('SELECT id FROM "public"."Users" WHERE email = $1;', [email]);
 
-            // Client.Query returns an object of type pg.Result (https://node-postgres.com/apis/result)
-            // Of special intrest is the rows and rowCount properties of this object.
-
             id = output.rows[0].id;
 
         }catch(error) {
             console.error(error);
-            //TODO : Error handling?? Remember that this is a module seperate from your server 
         }finally {
-            client.end(); // Always disconnect from the database.
+            client.end();
         }
 
         return id;
@@ -177,16 +146,11 @@ class DBManager {
             await client.connect();
             const output = await client.query('SELECT EXISTS(SELECT * FROM "public"."Users" WHERE username = $1 OR email = $2);', [username, email]);
 
-            // Client.Query returns an object of type pg.Result (https://node-postgres.com/apis/result)
-            // Of special intrest is the rows and rowCount properties of this object.
-
             users = output.rows;
-
         }catch(error) {
             console.error(error);
-            //TODO : Error handling?? Remember that this is a module seperate from your server 
         }finally {
-            client.end(); // Always disconnect from the database.
+            client.end();
         }
 
         return users;
@@ -200,16 +164,10 @@ class DBManager {
             await client.connect();
             const output = await client.query('UPDATE "public"."Users" SET games = $1, wins = $2, losses = $3 WHERE id = $4;', [user.games, user.wins, user.losses, user.id]);
 
-            // Client.Query returns an object of type pg.Result (https://node-postgres.com/apis/result)
-            // Of special intrest is the rows and rowCount properties of this object.
-
-            //TODO Did we update the user?
-
         }catch(error) {
             console.error(error);
-            //TODO : Error handling?? Remember that this is a module seperate from your server 
         }finally {
-            client.end(); // Always disconnect from the database.
+            client.end();
         }
     }
 }

@@ -2,8 +2,6 @@
 import { io } from "../server.mjs";
 import { games, gameLookup } from "../routes/gameRoute.mjs";
 
-// Vet ikke om det er sånn, men kan hende at sockets som ble disconnecta fortsatt er med i rom, pass på at de ikke er det i tilfelle det har noe å si for performance
-
 export function startIo(){
     io.on("connection", (socket) =>{
         console.log("User connected: " + socket.id);

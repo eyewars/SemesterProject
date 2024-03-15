@@ -27,18 +27,8 @@ server.get("/", (req, res, next) => {
 	res.status(200).send(JSON.stringify({ msg: "These are not the droids...." })).end();
 });
 
-// Start the server (Bytta til superServer)
 superServer.listen(server.get("port"), function () {
 	console.log("server running", server.get("port"));
 });
 
 startIo();
-
-/*
-
-TODO:
-
-1. Fjern unødvendig kode, kommentarer, og logs (på både client og server) (DETTE INKLUDERER ROUTES SOM BLE BRUKT FOR TESTING OG IKKE LENGER BRUKES)
-2. Add basic offline greier (han hadde en repo om det på github)
-
-*/

@@ -41,7 +41,6 @@ GAME_API.post("/", authenticateToken, gameManager.createNewGame, (req, res) => {
         gameLookup[res.locals.player2Id] = games.length - 1;
 
         ongoingGamesLookup[games.length - 1] = games.length - 1;
-        console.log(ongoingGamesLookup);
 
         res.status(HTTPCodes.SuccesfullResponse.Ok).json({message: "New Game Created!", id: req.token.userId}).end();
     }

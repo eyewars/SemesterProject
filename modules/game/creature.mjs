@@ -12,7 +12,6 @@ class Creature{
         this.width = 40;
         this.height = 40;
 
-        // BRUKER IKKE xPos LENGER
         if (type == "friend"){
             this.xPos = 0;
             this.myCell = 0;

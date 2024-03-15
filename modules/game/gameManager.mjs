@@ -27,7 +27,7 @@ class GameManager{
             console.log(this.#players);
 
             if (this.#players.length > 2){
-                console.log("Noe har gått jævlig galt, det er mer enn 2 spillere!");
+                console.log("Something has gone very wrong!");
             }
             else if (this.#players.length == 2){
                 res.locals.startGame = true;

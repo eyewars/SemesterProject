@@ -28,15 +28,12 @@ USER_API.post("/login", createHashedPassword, async (req, res) => {
 })
 
 USER_API.get("/isLoggedIn", authenticateToken, async (req, res) => {
-	//Hvis du allerede har en valid token når du åpner/refresher nettsiden, så vil du få en ny en. Dette er sånn at ikke tokenen din kan tilfeldigvis går ut mens du holder på med noe.
 	const newToken = createToken(req.token.userId);
 
 	res.status(HTTPCodes.SuccesfullResponse.Ok).json({token: newToken}).end();
 })
 
 USER_API.get("/", authenticateToken, async (req, res) => {
-	// Tip: All the information you need to get the id part of the request can be found in the documentation 
-	// https://expressjs.com/en/guide/routing.html (Route parameters)
 	const userInfo = await DBManager.getUser(req.token.userId);
 
 	res.status(HTTPCodes.SuccesfullResponse.Ok).send(userInfo).end();
@@ -52,8 +49,6 @@ USER_API.post("/check", async (req, res) => {
 
 USER_API.post("/", createHashedPassword, async (req, res) => {
 	const { username, email, password } = req.body;
-
-	console.log(req.body);
 
 	const exists = await DBManager.checkIfUserExists(username, email);
 
@@ -83,8 +78,6 @@ USER_API.post("/", createHashedPassword, async (req, res) => {
 })
 
 USER_API.put("/", authenticateToken, createHashedPassword, async (req, res) => {
-	//TODO: edit user
-
 	const userInfo = await DBManager.getUser(req.token.userId);
 
 	let { username, email, password } = req.body;
@@ -107,8 +100,6 @@ USER_API.put("/", authenticateToken, createHashedPassword, async (req, res) => {
 })
 
 USER_API.delete("/", authenticateToken, async (req, res) => {
-	//TODO: Delete user
-
 	const deletion = await DBManager.deleteUser(req.token.userId);
 
 	if (deletion){

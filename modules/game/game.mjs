@@ -161,10 +161,6 @@ class Game{
         }
     }
 
-    /*
-    Buggen SKJER hvis begge hopper frem og treffer hverandre, ikke hvis bare en hopper hen til den andre. Aka hvis det er oddetall så blir det riktig, partall blir det bug.
-    */
-
     move(){
         let friendReachedEnd = false;
         this.friends.forEach((friend) => {

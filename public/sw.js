@@ -30,7 +30,6 @@ const cacheFirst = async (request) => {
 };
 
 self.addEventListener("install", (event) => {
-    console.log("Test");
     event.waitUntil(
         addResourcesToCache(assets)
     );
