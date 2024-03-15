@@ -14,6 +14,7 @@ const registerTemplate = document.getElementById("registerTemplate");
 const settingsTemplate = document.getElementById("settingsTemplate");
 const queueTemplate = document.getElementById("queueTemplate");
 export const gameOverTemplate = document.getElementById("gameOverTemplate");
+const offlineTemplate = document.getElementById("offlineTemplate");
 
 const usernameAlert = "Username needs to be between 1 and 12 characters";
 const emailAlert = "Invalid E-Mail address";
@@ -222,6 +223,8 @@ export function createUI(template){
         gameOverMenuButton.addEventListener("click", (event) => {
             createUI(startTemplate);
         }) 
+    } else if (template == offlineTemplate){
+
     }
 }
 
@@ -232,4 +235,14 @@ async function loadInitialPage(){
 
     setToken(data.token);
 }
-loadInitialPage();
+
+async function isOnline(){
+    if (navigator.onLine){
+        loadInitialPage();
+    }
+    else {
+        createUI(offlineTemplate);
+    }
+}
+
+isOnline();
