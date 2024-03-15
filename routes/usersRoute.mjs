@@ -8,8 +8,6 @@ import { createToken, authenticateToken } from "../modules/security/bearerToken.
 
 const USER_API = express.Router();
 
-const users = [];
-
 USER_API.post("/login", createHashedPassword, async (req, res) => {
 	const { email, password } = req.body;
 
