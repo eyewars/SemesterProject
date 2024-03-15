@@ -7,7 +7,7 @@
     "description": "Online game",
     "icons": [
         {
-            "src": "images/icon.png",
+            "src": "images/logo.png",
             "sizes": "150x150",
             "type": "image/png"
         }

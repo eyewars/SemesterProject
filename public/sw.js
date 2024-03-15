@@ -12,7 +12,7 @@ const assets = [
     "/js/socketEmitHandler.mjs",
     "/js/getInfo.mjs",
     "/manifest.json",
-    "/images/icon.png",
+    "/images/logo.png",
     "https://cdn.socket.io/4.7.4/socket.io.esm.min.js"
 ];
 
